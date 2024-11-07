@@ -1,10 +1,10 @@
 package store;
 
-import store.context.ContextLoader;
+import store.context.ContextProductLoader;
 
 public class Application {
     public static void main(String[] args) {
-        ContextLoader contextLoader = new ContextLoader();
-        contextLoader.initializeData();
+        ContextProductLoader contextProductLoader = new ContextProductLoader();
+        contextProductLoader.initializeData();
     }
 }
