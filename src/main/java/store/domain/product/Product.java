@@ -18,7 +18,6 @@ public class Product {
         this.promotion = promotion;
     }
 
-
     public static Product from(String[] info){
         String name = validateName(info[0]);
         long price = validatePriceAndQuantity(info[1]);
@@ -51,8 +50,12 @@ public class Product {
         return price;
     }
 
-    public Long getQuantity() {
-        return this.quantity;
+    public boolean isPurchaseAvailable(long purchaseAmount) {
+        return quantity >= purchaseAmount;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

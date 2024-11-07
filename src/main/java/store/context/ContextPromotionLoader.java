@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class ContextPromotionLoader {
     private LinkedHashMap<String, Promotion> promotions = new LinkedHashMap<>();
@@ -22,8 +21,5 @@ public class ContextPromotionLoader {
             throw new RuntimeException(e);
         }
 
-//        for (Map.Entry<String, Promotion> promotionEntry : promotions.entrySet()) {
-//            System.out.println("Promotion Name: " + promotionEntry.getKey().toString() + ", " + promotionEntry.getValue());
-//        }
     }
 }

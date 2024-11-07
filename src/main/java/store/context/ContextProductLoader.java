@@ -1,24 +1,25 @@
 package store.context;
 
 import store.domain.product.Product;
+import store.domain.product.Products;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 
 public class ContextProductLoader {
-    private LinkedHashMap<Product, Long> products = new LinkedHashMap<>();
 
-    public void initializeData() {
+    public Products initializeProducts() {
+        Products products = new Products();
         try {
             Files.lines(Paths.get("src/main/resources/products.md"))
                     .skip(1)
                     .map(line -> line.split(","))
                     .map(Product::from)
-                    .forEach(product -> products.put(product, product.getQuantity()));
+                    .forEach(product -> products.addProduct(product));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return products;
     }
 }

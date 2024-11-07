@@ -2,11 +2,11 @@ package store;
 
 import store.context.ContextProductLoader;
 import store.context.ContextPromotionLoader;
-import store.domain.product.Promotion;
+import store.domain.product.Products;
 
 public class Application {
     public static void main(String[] args) {
-        new ContextProductLoader().initializeData();
+        Products products = new ContextProductLoader().initializeProducts();
         new ContextPromotionLoader().initializeData();
     }
 }
