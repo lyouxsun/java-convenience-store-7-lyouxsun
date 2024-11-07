@@ -16,7 +16,7 @@ public class ContextProductLoader {
                     .skip(1)
                     .map(line -> line.split(","))
                     .map(Product::from)
-                    .forEach(product -> products.addProduct(product));
+                    .forEach(products::addProduct);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

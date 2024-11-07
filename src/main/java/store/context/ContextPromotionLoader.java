@@ -1,25 +1,25 @@
 package store.context;
 
-import store.domain.product.Promotion;
+import store.domain.promotion.Promotion;
+import store.domain.promotion.Promotions;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 
 public class ContextPromotionLoader {
-    private LinkedHashMap<String, Promotion> promotions = new LinkedHashMap<>();
 
-    public void initializeData() {
+    public Promotions initializePromotions() {
+        Promotions promotions = new Promotions();
         try {
             Files.lines(Paths.get("src/main/resources/promotions.md"))
                     .skip(1)
                     .map(line -> line.split(","))
                     .map(Promotion::from)
-                    .forEach(promotion -> promotions.put(promotion.getName(), promotion));
+                    .forEach(promotions::addPromotion);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        return promotions;
     }
 }

@@ -1,4 +1,4 @@
-package store.domain.product;
+package store.domain.promotion;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
 
