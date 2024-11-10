@@ -38,4 +38,15 @@ public class InputControllerTest {
                 .hasMessageContaining("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
     }
 
+    @DisplayName("구매 수량이 정수가 아닌 경우 예외가 발생한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"[사이다-5ㅓ],[감자칩-1a]", "[비타민워터-*6]", "[탄산수--6]"})
+    void nonIntegerExceptionTest(String buy) {
+
+        // when & then
+        assertThatThrownBy(() -> inputController.validateBuy(buy))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("[ERROR] 구매 수량은 정수여야 합니다. 다시 입력해 주세요.");
+    }
+
 }

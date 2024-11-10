@@ -56,11 +56,10 @@ public class InputController {
     }
 
     private static int validateAmount(String rawAmount) {
-        try {
+        if (rawAmount.matches("\\d+")) {
             return Integer.parseInt(rawAmount);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         }
+        throw new IllegalArgumentException("[ERROR] 구매 수량은 정수여야 합니다. 다시 입력해 주세요.");
     }
 
     private String[] validateProductInput(String item) {
