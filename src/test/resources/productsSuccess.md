@@ -6,4 +6,3 @@ name,price,quantity,promotion
 오렌지주스,1800,9,MD추천상품
 탄산수,1200,5,탄산2+1
 물,500,10,null
-

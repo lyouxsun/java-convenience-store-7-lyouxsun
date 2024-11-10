@@ -38,14 +38,14 @@ public class Product {
         return name;
     }
 
-    private static long validatePriceAndQuantity(String priceInput) {
-        String rawPrice = priceInput.trim();
-        if (!rawPrice.matches("\\d+")) {
-            throw new DataValidationException("[ERROR] 상품 가격은 정수여야 합니다. products.md 파일을 확인해주세요.");
+    private static long validatePriceAndQuantity(String numberInput) {
+        String rawInput = numberInput.trim();
+        if (!rawInput.matches("\\d+")) {
+            throw new DataValidationException("[ERROR] 상품 가격과 수량은 정수여야 합니다. products.md 파일을 확인해주세요.");
         }
-        long price = Long.parseLong(rawPrice);
+        long price = Long.parseLong(rawInput);
         if (price < 0) {
-            throw new DataValidationException("[ERROR] 상품 가격은 0원 이상의 정수여야 합니다. products.md 파일을 확인해주세요.");
+            throw new DataValidationException("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다. products.md 파일을 확인해주세요.");
         }
         return price;
     }

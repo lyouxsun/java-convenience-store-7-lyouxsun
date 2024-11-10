@@ -37,4 +37,8 @@ public class ProductRepository {
                 .mapToLong(Product::getAmount)
                 .sum();
     }
+
+    public int getSize(){
+        return products.size();
+    }
 }
