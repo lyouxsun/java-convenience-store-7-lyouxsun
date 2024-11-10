@@ -36,7 +36,8 @@ public class InputController {
             try {
                 String buy = inputView.requestPurchase();
                 Map<String, Integer> inputs = validateBuy(buy);
-                return storeService.validateInputs(inputs);
+                storeService.validateInputs(inputs);
+                return inputs;
             } catch (IllegalArgumentException e) {
                 showException(e);
             }

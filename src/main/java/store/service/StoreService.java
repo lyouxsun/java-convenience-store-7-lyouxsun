@@ -27,13 +27,12 @@ public class StoreService {
         return productRepository.productsToDto();
     }
 
-    public Map<String, Integer> validateInputs(Map<String, Integer> inputs) {
+    public void validateInputs(Map<String, Integer> inputs) {
         for (Map.Entry<String, Integer> entry : inputs.entrySet()) {
             long quantity = productRepository.findQuantityByName(entry.getKey());
             if (quantity < entry.getValue()) {
                 throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요");
             }
         }
-        return inputs;
     }
 }
