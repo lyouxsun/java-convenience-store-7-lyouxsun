@@ -18,7 +18,7 @@ public class ProductRepository {
         products.add(product);
     }
 
-    public InventoryDto productToDto(){
+    public InventoryDto productsToDto(){
         StringBuilder sb = new StringBuilder();
         for (Product product : products) {
             sb.append(product.toString());

@@ -16,6 +16,6 @@ public class StoreService {
     }
 
     public InventoryDto findAllInventory() {
-        return productRepository.productToDto();
+        return productRepository.productsToDto();
     }
 }
