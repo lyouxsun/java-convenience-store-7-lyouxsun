@@ -6,7 +6,6 @@ import store.repository.ProductRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ContextProductLoader {
 
@@ -19,7 +18,7 @@ public class ContextProductLoader {
                     .map(Product::from)
                     .forEach(productRepository::addProduct);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("[ERROR] 상품 목록이 잘못된 형식으로 되어 있습니다.");
         }
         return productRepository;
     }

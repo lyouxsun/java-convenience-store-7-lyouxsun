@@ -18,7 +18,7 @@ public class ContextPromotionLoader {
                     .map(Promotion::from)
                     .forEach(promotionRepository::addPromotion);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("[ERROR] 프로모션 목록이 잘못된 형식으로 되어 있습니다.");
         }
         return promotionRepository;
     }
