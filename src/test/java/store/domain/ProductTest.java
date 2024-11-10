@@ -37,4 +37,34 @@ public class ProductTest {
                 .isInstanceOf(DataValidationException.class)
                 .hasMessageContaining("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
     }
+
+    @DisplayName("상품의 프로모션 정보가 있는 경우 프로모션이 있다고 저장해야 한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"콜라,10001,10,탄산2+1", "사이다,12000,700,반짝할인"})
+    void promotionTest(String productInput) {
+        // given
+        String[] productInfos = productInput.trim().split(",");
+
+        // when
+        Product product = Product.from(productInfos);
+
+        // then
+        Assertions.assertThat(product.isPromotion()).isEqualTo(true);
+        Assertions.assertThat(product.isPromotion()).isEqualTo(true);
+    }
+
+    @DisplayName("상품의 프로모션 정보가 null인 경우 프로모션이 없다고 저장해야 한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"콜라,10001,10,null", "사이다,12000,700,null"})
+    void noPromotionTest(String productInput) {
+        // given
+        String[] productInfos = productInput.trim().split(",");
+
+        // when
+        Product product = Product.from(productInfos);
+
+        // then
+        Assertions.assertThat(product.isPromotion()).isEqualTo(false);
+        Assertions.assertThat(product.isPromotion()).isEqualTo(false);
+    }
 }

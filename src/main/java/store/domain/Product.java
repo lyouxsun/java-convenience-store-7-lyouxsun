@@ -78,4 +78,8 @@ public class Product {
     public long getAmount() {
         return quantity;
     }
+
+    public boolean isPromotion() {
+        return isPromotion;
+    }
 }
