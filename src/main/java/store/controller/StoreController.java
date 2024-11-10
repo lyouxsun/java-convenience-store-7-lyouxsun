@@ -23,8 +23,8 @@ public class StoreController {
 
     public void run(Map<String, Integer> purchase) {
         Map<String, PurchaseDto> purchaseResult = storeService.processPurchase(purchase);
-        InventoryDto inventoryDto = storeService.findAllInventory();
 
+        boolean isMembershipSale = InputView.requestYorN(MEMBERSHIP_SALE.getMessage());
     }
 
 }

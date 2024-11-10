@@ -51,10 +51,7 @@ public class StoreService {
     }
 
     public void processPromotion(Map<String, Integer> purchaseList, Map<String, PurchaseDto> purchaseResult) {
-        Set<Product> products = purchaseList.entrySet().stream()
-                .map(purchase -> productRepository.findByNameAndPromotion(purchase.getKey(), true))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+        Set<Product> products = filterByPromotion(purchaseList, true);
         this.noPromotionProducts = new LinkedHashMap<>();
         for (Product promotionProduct : products) {
             int hopeAmount = purchaseList.get(promotionProduct.getName());
@@ -65,10 +62,7 @@ public class StoreService {
     }
 
     public void processNoPromotion(Map<String, Integer> purchaseList, Map<String, PurchaseDto> purchaseResult) {
-        Set<Product> noPromotionProducts = purchaseList.entrySet().stream()
-                .map(purchase -> productRepository.findByNameAndPromotion(purchase.getKey(), true))
-                .filter(Objects::isNull)
-                .collect(Collectors.toSet());
+        Set<Product> noPromotionProducts = filterByPromotion(purchaseList, false);
 
         for (Product noPromotionProduct : noPromotionProducts) {
             int hopeAmount = purchaseList.get(noPromotionProduct.getName());
@@ -78,4 +72,10 @@ public class StoreService {
         }
     }
 
+    private Set<Product> filterByPromotion(Map<String, Integer> purchaseList, boolean isPromotion) {
+        return purchaseList.entrySet().stream()
+                .map(purchase -> productRepository.findByNameAndPromotion(purchase.getKey(), isPromotion))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
 }
