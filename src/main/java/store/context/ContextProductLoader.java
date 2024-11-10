@@ -23,6 +23,7 @@ public class ContextProductLoader {
             throw new IllegalArgumentException("[ERROR] 상품 목록을 입력받을 수 없습니다.");
         } catch (DataValidationException e){
             ExceptionUtils.showException(e);
+            throw e;
         }
         return productRepository;
     }
