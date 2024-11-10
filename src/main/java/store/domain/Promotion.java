@@ -61,6 +61,11 @@ public class Promotion {
         return name;
     }
 
+    public boolean isBetweenDates(){
+        LocalDate now = LocalDate.now();
+        return now.isAfter(startDate) && now.isBefore(endDate);
+    }
+
     @Override
     public String toString() {
         return "Promotion: {" +
