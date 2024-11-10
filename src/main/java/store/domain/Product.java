@@ -54,6 +54,10 @@ public class Product {
         return quantity >= purchaseAmount;
     }
 
+    public boolean isValidName(String name){
+        return this.name.equals(name);
+    }
+
     public String getName() {
         return name;
     }
@@ -69,5 +73,9 @@ public class Product {
         return "- " + name + " "
                 + price + "원 "
                 + quantity + "개\n";
+    }
+
+    public long getAmount() {
+        return quantity;
     }
 }
