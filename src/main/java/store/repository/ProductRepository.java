@@ -5,13 +5,12 @@ import store.dto.InventoryDto;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class ProductRepository {
     private final Set<Product> products;
 
     public ProductRepository() {
-        this.products = new LinkedHashSet();
+        this.products = new LinkedHashSet<>();
     }
 
     public void addProduct(Product product) {
@@ -38,7 +37,7 @@ public class ProductRepository {
                 .sum();
     }
 
-    public int getSize(){
+    public int getSize() {
         return products.size();
     }
 }

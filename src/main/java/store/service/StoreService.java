@@ -13,14 +13,14 @@ import java.util.Map;
 public class StoreService {
     private static final String productsPath = "src/main/resources/products.md";
     private static final String promotionsPath = "src/main/resources/promotions.md";
-    private final ProductRepository productRepository;
     private final PromotionRepository promotionRepository;
+    private final ProductRepository productRepository;
 
     public StoreService() {
-        Path productsList = Paths.get(productsPath);
-        Path promotionsList = Paths.get(promotionsPath);
-        this.productRepository = new ContextProductLoader().initializeProducts(productsList);
-        this.promotionRepository = new ContextPromotionLoader().initializePromotions(promotionsList);
+        Path promotionsFile = Paths.get(promotionsPath);
+        Path productsFile = Paths.get(productsPath);
+        this.promotionRepository = new ContextPromotionLoader().initializePromotions(promotionsFile);
+        this.productRepository = new ContextProductLoader().initializeProducts(productsFile);
     }
 
     public InventoryDto findAllInventory() {

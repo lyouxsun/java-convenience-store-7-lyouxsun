@@ -14,7 +14,7 @@ public class ContextPromotionLoader {
     public PromotionRepository initializePromotions(Path path) {
         PromotionRepository promotionRepository = new PromotionRepository();
         try {
-            loadContext(path, promotionRepository);
+            loadPromotionContext(path, promotionRepository);
         } catch (IOException e) {
             throw new IllegalArgumentException("[ERROR] 프로모션 목록을 입력받을 수 없습니다.");
         } catch (DataValidationException e){
@@ -24,7 +24,7 @@ public class ContextPromotionLoader {
         return promotionRepository;
     }
 
-    private static void loadContext(Path path, PromotionRepository promotionRepository) throws IOException {
+    private static void loadPromotionContext(Path path, PromotionRepository promotionRepository) throws IOException {
         Files.lines(path)
                 .skip(1)
                 .map(line -> line.split(","))

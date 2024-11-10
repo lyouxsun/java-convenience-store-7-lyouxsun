@@ -1,6 +1,7 @@
 package store.domain;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
+import store.repository.PromotionRepository;
 
 public class Product {
 
@@ -8,9 +9,9 @@ public class Product {
     private long price;
     private long quantity;
     private boolean isPromotion;
-    private String promotion;
+    private Promotion promotion;
 
-    private Product(String name, long price, long quantity, boolean isPromotion, String promotion) {
+    private Product(String name, long price, long quantity, boolean isPromotion, Promotion promotion) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -22,10 +23,10 @@ public class Product {
         String name = validateName(info[0]);
         long price = validatePriceAndQuantity(info[1]);
         long quantity = validatePriceAndQuantity(info[2]);
-        boolean isPromotion = !info[3].equals("null");
-        String promotion = info[3];
-        if (!isPromotion) {
-            promotion = null;
+        boolean isPromotion = false;
+        Promotion promotion = PromotionRepository.fromName(info[3]);
+        if (promotion != null) {
+            isPromotion = true;
         }
         return new Product(name, price, quantity, isPromotion, promotion);
     }

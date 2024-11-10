@@ -14,17 +14,21 @@ public class ContextProductLoader {
     public ProductRepository initializeProducts(Path productsList) {
         ProductRepository productRepository = new ProductRepository();
         try {
-            Files.lines(productsList)
-                    .skip(1)
-                    .map(line -> line.split(","))
-                    .map(Product::from)
-                    .forEach(productRepository::addProduct);
+            loadProductContext(productsList, productRepository);
         } catch (IOException e) {
             throw new IllegalArgumentException("[ERROR] 상품 목록을 입력받을 수 없습니다.");
-        } catch (DataValidationException e){
+        } catch (DataValidationException e) {
             ExceptionUtils.showException(e);
             throw e;
         }
         return productRepository;
+    }
+
+    private static void loadProductContext(Path productsList, ProductRepository productRepository) throws IOException {
+        Files.lines(productsList)
+                .skip(1)
+                .map(line -> line.split(","))
+                .map(Product::from)
+                .forEach(productRepository::addProduct);
     }
 }

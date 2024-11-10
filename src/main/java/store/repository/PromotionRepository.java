@@ -1,15 +1,16 @@
 package store.repository;
 
+import store.domain.Product;
 import store.domain.Promotion;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PromotionRepository {
-    private final Map<String, Promotion> promotions;
+    private static Map<String, Promotion> promotions;
 
     public PromotionRepository() {
-        this.promotions = new LinkedHashMap<>();
+        promotions = new LinkedHashMap<>();
     }
 
     public void addPromotion(Promotion promotion) {
@@ -18,5 +19,9 @@ public class PromotionRepository {
 
     public int getSize(){
         return promotions.size();
+    }
+
+    public static Promotion fromName(String name) {
+        return promotions.get(name);
     }
 }

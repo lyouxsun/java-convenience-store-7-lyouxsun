@@ -1,14 +1,29 @@
 package store.domain;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
+import store.context.ContextPromotionLoader;
+import store.repository.PromotionRepository;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class ProductTest {
+
+    private PromotionRepository promotionRepository;
+
+    @BeforeEach
+    public void setUp() {
+        String promotionsPath = "src/main/resources/promotions.md";
+        Path promotionsFile = Paths.get(promotionsPath);
+        promotionRepository = new ContextPromotionLoader().initializePromotions(promotionsFile);
+    }
 
     @DisplayName("상품 정보가 정상적인 경우 성공적을 Product 객체를 생성한다.")
     @ParameterizedTest
