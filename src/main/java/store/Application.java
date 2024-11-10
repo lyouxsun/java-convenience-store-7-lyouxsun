@@ -2,12 +2,13 @@ package store;
 
 import store.context.ContextProductLoader;
 import store.context.ContextPromotionLoader;
-import store.domain.product.Products;
-import store.domain.promotion.Promotions;
+import store.controller.StoreController;
+import store.repository.ProductRepository;
+import store.repository.PromotionRepository;
 
 public class Application {
     public static void main(String[] args) {
-        Products products = new ContextProductLoader().initializeProducts();
-        Promotions promotions = new ContextPromotionLoader().initializePromotions();
+        StoreController storeController = new StoreController();
+        storeController.run();
     }
 }

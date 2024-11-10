@@ -1,12 +1,14 @@
-package store.domain.promotion;
+package store.repository;
+
+import store.domain.Promotion;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Promotions {
+public class PromotionRepository {
     private final Map<String, Promotion> promotions;
 
-    public Promotions() {
+    public PromotionRepository() {
         this.promotions = new LinkedHashMap<>();
     }
 
