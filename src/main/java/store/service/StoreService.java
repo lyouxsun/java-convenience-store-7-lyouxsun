@@ -6,6 +6,8 @@ import store.dto.InventoryDto;
 import store.repository.ProductRepository;
 import store.repository.PromotionRepository;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class StoreService {
@@ -13,8 +15,10 @@ public class StoreService {
     private final PromotionRepository promotionRepository;
 
     public StoreService() {
-        this.productRepository = new ContextProductLoader().initializeProducts();
-        this.promotionRepository = new ContextPromotionLoader().initializePromotions();
+        Path productsList = Paths.get("src/main/resources/products.md");
+        Path promotionsList = Paths.get("src/main/resources/promotions.md");
+        this.productRepository = new ContextProductLoader().initializeProducts(productsList);
+        this.promotionRepository = new ContextPromotionLoader().initializePromotions(promotionsList);
     }
 
     public InventoryDto findAllInventory() {

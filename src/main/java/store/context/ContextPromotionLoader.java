@@ -5,14 +5,14 @@ import store.repository.PromotionRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 public class ContextPromotionLoader {
 
-    public PromotionRepository initializePromotions() {
+    public PromotionRepository initializePromotions(Path path) {
         PromotionRepository promotionRepository = new PromotionRepository();
         try {
-            Files.lines(Paths.get("src/main/resources/promotions.md"))
+            Files.lines(path)
                     .skip(1)
                     .map(line -> line.split(","))
                     .map(Promotion::from)
