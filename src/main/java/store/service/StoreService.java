@@ -11,12 +11,14 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 public class StoreService {
+    private static final String productsPath = "src/main/resources/products.md";
+    private static final String promotionsPath = "src/main/resources/promotions.md";
     private final ProductRepository productRepository;
     private final PromotionRepository promotionRepository;
 
     public StoreService() {
-        Path productsList = Paths.get("src/main/resources/products.md");
-        Path promotionsList = Paths.get("src/main/resources/promotions.md");
+        Path productsList = Paths.get(productsPath);
+        Path promotionsList = Paths.get(promotionsPath);
         this.productRepository = new ContextProductLoader().initializeProducts(productsList);
         this.promotionRepository = new ContextPromotionLoader().initializePromotions(promotionsList);
     }
