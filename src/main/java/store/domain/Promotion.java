@@ -22,31 +22,35 @@ public class Promotion {
 
     public static Promotion from(String[] info) {
         String name = validateName(info[0]);
-        int buyQuantity = Integer.parseInt(info[1]);
-        int getQuantity = Integer.parseInt(info[2]);
-        LocalDate startDate = LocalDate.parse(info[3]);
-        LocalDate endDate = LocalDate.parse(info[4]);
+        int buyQuantity = validateQuantity(info[1]);
+        int getQuantity = validateQuantity(info[2]);
+        LocalDate startDate = validateDate(info[3]);
+        LocalDate endDate = validateDate(info[4]);
         return new Promotion(name, buyQuantity, getQuantity, startDate, endDate);
     }
 
     private static String validateName(String rawName) {
         String name = rawName.trim();
         if (name.isBlank()) {
-            throw new DataValidationException("[ERROR] 상품 이름이 잘못 등록되어 있습니다. products.md 파일을 확인해주세요.");
+            throw new DataValidationException("[ERROR] 프로모션 상품 이름이 잘못 등록되어 있습니다.");
         }
         return name;
     }
 
-    private static long validateQuantity(String quantityInput) {
+    private static int validateQuantity(String quantityInput) {
         String rawQuantity = quantityInput.trim();
         if (!rawQuantity.matches("\\d+")) {
-            throw new DataValidationException("[ERROR] 상품 가격은 정수여야 합니다. products.md 파일을 확인해주세요.");
+            throw new DataValidationException("[ERROR] 프로모션 상품 수량은 0 이상의 정수여야 합니다.");
         }
-        long quantity = Long.parseLong(rawQuantity);
-        if (quantity < 0) {
-            throw new DataValidationException("[ERROR] 상품 가격은 0원 이상의 정수여야 합니다. products.md 파일을 확인해주세요.");
-        }
+        int quantity = Integer.parseInt(rawQuantity);
         return quantity;
+    }
+
+    private static LocalDate validateDate(String date) {
+        if (date == null ||  date.isBlank()){
+            throw new DataValidationException("[ERROR] 프로모션 날짜가 잘못된 형식으로 등록되어 있습니다.");
+        }
+        return LocalDate.parse(date);
     }
 
     public String getName() {
