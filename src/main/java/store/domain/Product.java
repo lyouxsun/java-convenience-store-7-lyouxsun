@@ -54,7 +54,7 @@ public class Product {
         return quantity >= purchaseAmount;
     }
 
-    public boolean isValidName(String name){
+    public boolean isSameName(String name){
         return this.name.equals(name);
     }
 

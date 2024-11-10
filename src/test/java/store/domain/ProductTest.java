@@ -1,0 +1,40 @@
+package store.domain;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+
+public class ProductTest {
+
+    @DisplayName("상품 정보가 정상적인 경우 성공적을 Product 객체를 생성한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"콜라,100012,10,탄산2+1", "사이다,12000,700,null"})
+    void createProductSuccess(String productInput) {
+        // given
+        String[] productInfos = productInput.trim().split(",");
+
+        // when
+        Product product = Product.from(productInfos);
+
+        // then
+        Assertions.assertThat(product.getName()).isEqualTo(productInfos[0]);
+        Assertions.assertThat(product.getAmount()).isEqualTo(Long.parseLong(productInfos[2]));
+    }
+
+    @DisplayName("상품의 가격과 수량이 정수가 아니면 예외가 발생한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"콜라,1000j12,10,탄산2+1", "사이다,12000,700aa,null"})
+    void nonIntegerExceptionTest(String productInput) {
+        // given
+        String[] productInfos = productInput.trim().split(",");
+
+        // when & then
+        assertThatThrownBy(() -> Product.from(productInfos))
+                .isInstanceOf(DataValidationException.class)
+                .hasMessageContaining("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
+    }
+}
