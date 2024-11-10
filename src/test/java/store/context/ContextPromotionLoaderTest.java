@@ -39,4 +39,17 @@ public class ContextPromotionLoaderTest {
                 .isInstanceOf(DataValidationException.class)
                 .hasMessageContaining("[ERROR] 프로모션 이름이 잘못 등록되어 있습니다.");
     }
+
+    @DisplayName("프로모션 수량이 정수가 아니면 오류가 발생한다.")
+    @Test
+    void promotionQuantityExceptionTest() {
+        // given
+        Path quantityFailTest = Paths.get("src/test/resources/promotionsFailQuantity.md");
+
+        // when & then
+        ContextPromotionLoader contextPromotionLoader = new ContextPromotionLoader();
+        Assertions.assertThatThrownBy(() -> contextPromotionLoader.initializePromotions(quantityFailTest))
+                .isInstanceOf(DataValidationException.class)
+                .hasMessageContaining("[ERROR] 프로모션 상품 수량은 0 이상의 정수여야 합니다.");
+    }
 }
