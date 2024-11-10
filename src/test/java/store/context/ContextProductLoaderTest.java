@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.assertj.core.api.Assertions.*;
+
 public class ContextProductLoaderTest {
 
     @DisplayName("상품 목록이 정상적으로 입력된 경우")
@@ -25,7 +27,7 @@ public class ContextProductLoaderTest {
 
         // then
         long lineCount = Files.lines(productsTest).count();
-        Assertions.assertThat(productsCount).isEqualTo(lineCount - 1);
+        assertThat(productsCount).isEqualTo(lineCount - 1);
     }
 
     @DisplayName("상품명이 적혀있지 않은 경우 예외가 발생한다")
@@ -36,7 +38,7 @@ public class ContextProductLoaderTest {
 
         // when & then
         ContextProductLoader contextProductLoader = new ContextProductLoader();
-        Assertions.assertThatThrownBy(() -> contextProductLoader.initializeProducts(nameFailTest))
+        assertThatThrownBy(() -> contextProductLoader.initializeProducts(nameFailTest))
                 .isInstanceOf(DataValidationException.class)
                 .hasMessageContaining("[ERROR] 상품 이름이 잘못 등록되어 있습니다.");
     }
@@ -49,7 +51,7 @@ public class ContextProductLoaderTest {
 
         // when & then
         ContextProductLoader contextProductLoader = new ContextProductLoader();
-        Assertions.assertThatThrownBy(() -> contextProductLoader.initializeProducts(productsTest))
+        assertThatThrownBy(() -> contextProductLoader.initializeProducts(productsTest))
                 .isInstanceOf(DataValidationException.class)
                 .hasMessageContaining("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
     }
