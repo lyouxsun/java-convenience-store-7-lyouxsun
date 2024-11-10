@@ -5,6 +5,7 @@ import store.context.ContextPromotionLoader;
 import store.domain.Product;
 import store.dto.InventoryDto;
 import store.dto.PurchaseDto;
+import store.dto.ResultDto;
 import store.repository.ProductRepository;
 import store.repository.PromotionRepository;
 
@@ -77,5 +78,48 @@ public class StoreService {
                 .map(purchase -> productRepository.findByNameAndPromotion(purchase.getKey(), isPromotion))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
+    }
+
+
+    public ResultDto calculateAmount(Map<String, PurchaseDto> purchaseResult, boolean isMembershipSale) {
+
+        long totalAmount = getTotalAmount(purchaseResult);
+        long promotionAmount = getPromotionAmount(purchaseResult);
+        long membershipAmount = 0;
+        if (isMembershipSale) {
+            membershipAmount = getMembershipAmount(purchaseResult, totalAmount);
+        }
+        return new ResultDto(totalAmount, promotionAmount, membershipAmount);
+    }
+
+
+
+    private long getTotalAmount(Map<String, PurchaseDto> purchaseResult) {
+        return purchaseResult.entrySet().stream()
+                .mapToLong(entry -> productRepository.findAmountByName(entry.getKey()) * entry.getValue().getTotalNum())
+                .sum();
+    }
+
+    private long getPromotionAmount(Map<String, PurchaseDto> purchaseResult) {
+        return purchaseResult.entrySet().stream()
+                .filter(entry -> entry.getValue().isPromotion())
+                .mapToLong(entry -> productRepository.findAmountByName(entry.getKey()) * entry.getValue().getSetNum())
+                .sum();
+    }
+
+
+    private long getMembershipAmount(Map<String, PurchaseDto> purchaseResult, long totalAmount) {
+        long membershipTarget = totalAmount;
+        long promotionAmount = purchaseResult.entrySet().stream()
+                .filter(entry -> entry.getValue().isPromotion())
+                .mapToLong(entry -> productRepository.findAmountByName(entry.getKey()) * entry.getValue().getPromotionSet())
+                .sum();
+        membershipTarget -= promotionAmount;
+
+        membershipTarget *= 0.3;
+        if (membershipTarget < 8_000L){
+            return membershipTarget;
+        }
+        return 8_000;
     }
 }

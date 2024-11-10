@@ -5,6 +5,7 @@ import store.dto.InventoryDto;
 import store.dto.PurchaseDto;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class ProductRepository {
@@ -52,7 +53,7 @@ public class ProductRepository {
 
     public void purchase(String productName, boolean isPromotion, PurchaseDto purchaseDto) {
         Product product = findByNameAndPromotion(productName, isPromotion);
-        int hopeAmount = purchaseDto.getTotalAmount();
+        int hopeAmount = purchaseDto.getTotalNum();
         if (product.getQuantity() < hopeAmount) {
             hopeAmount -= product.getQuantity();
             product.reduceQuantity(product.getQuantity());
@@ -60,5 +61,13 @@ public class ProductRepository {
             noPromotion.reduceQuantity(hopeAmount);
         }
 
+    }
+
+    public long findAmountByName(String name) {
+        Optional<Product> optionalProduct = products.stream()
+                .filter(product -> product.getName().equals(name))
+                .findFirst();
+        Product product = optionalProduct.get();
+        return product.getAmount();
     }
 }

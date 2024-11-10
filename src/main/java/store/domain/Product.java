@@ -105,7 +105,7 @@ public class Product {
             boolean yes = InputView.requestYorN(PROMOTION_MORE.format(name));
             if (yes) {
                 setNum++;
-                return new PurchaseDto(purchaseAmount * setNum, setNum + 1, setQuantity);
+                return new PurchaseDto(purchaseAmount+1, setNum + 1, setQuantity);
             }
         }
 
