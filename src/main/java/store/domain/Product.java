@@ -18,13 +18,13 @@ public class Product {
         this.promotion = promotion;
     }
 
-    public static Product from(String[] info){
+    public static Product from(String[] info) {
         String name = validateName(info[0]);
         long price = validatePriceAndQuantity(info[1]);
         long quantity = validatePriceAndQuantity(info[2]);
         boolean isPromotion = !info[3].equals("null");
         String promotion = info[3];
-        if (!isPromotion){
+        if (!isPromotion) {
             promotion = null;
         }
         return new Product(name, price, quantity, isPromotion, promotion);
@@ -60,12 +60,9 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product: {" +
-                "name='" + name + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", isPromotion=" + isPromotion +
-                ", promotion='" + promotion + '\'' +
-                '}';
+        return "- " + name + " "
+                + price + "원 "
+                + quantity + "개 "
+                + promotion + "\n";
     }
 }

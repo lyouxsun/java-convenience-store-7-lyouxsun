@@ -1,5 +1,6 @@
 package store.controller;
 
+import store.dto.InventoryDto;
 import store.service.StoreService;
 import store.view.InputView;
 import store.view.OutputView;
@@ -18,6 +19,11 @@ public class StoreController {
     }
 
     public void run() {
+        showInventory();
+    }
 
+    private void showInventory() {
+        InventoryDto inventoryDto = storeService.findAllInventory();
+        inputView.requestPurchase(inventoryDto);
     }
 }

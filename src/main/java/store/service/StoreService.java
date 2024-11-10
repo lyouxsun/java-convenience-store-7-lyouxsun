@@ -2,6 +2,7 @@ package store.service;
 
 import store.context.ContextProductLoader;
 import store.context.ContextPromotionLoader;
+import store.dto.InventoryDto;
 import store.repository.ProductRepository;
 import store.repository.PromotionRepository;
 
@@ -14,4 +15,7 @@ public class StoreService {
         this.promotionRepository = new ContextPromotionLoader().initializePromotions();
     }
 
+    public InventoryDto findAllInventory() {
+        return productRepository.productToDto();
+    }
 }
