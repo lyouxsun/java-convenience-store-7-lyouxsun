@@ -16,7 +16,7 @@ public class ContextPromotionLoaderTest {
     @Test
     void promotionsLoadSuccessTest() throws IOException {
         // given
-        Path promotionSuccess = Paths.get("src/test/resources/promotionsSuccess.md");
+        Path promotionSuccess = Paths.get("src/test/resources/promotions/promotionsSuccess.md");
 
         // when
         PromotionRepository promotionRepository = new ContextPromotionLoader().initializePromotions(promotionSuccess);
@@ -31,7 +31,7 @@ public class ContextPromotionLoaderTest {
     @Test
     void promotionNameExceptionTest() {
         // given
-        Path nameFailTest = Paths.get("src/test/resources/promotionsFailName.md");
+        Path nameFailTest = Paths.get("src/test/resources/promotions/promotionsFailName.md");
 
         // when & then
         ContextPromotionLoader contextPromotionLoader = new ContextPromotionLoader();
@@ -44,7 +44,7 @@ public class ContextPromotionLoaderTest {
     @Test
     void promotionQuantityExceptionTest() {
         // given
-        Path quantityFailTest = Paths.get("src/test/resources/promotionsFailQuantity.md");
+        Path quantityFailTest = Paths.get("src/test/resources/promotions/promotionsFailQuantity.md");
 
         // when & then
         ContextPromotionLoader contextPromotionLoader = new ContextPromotionLoader();
@@ -57,7 +57,7 @@ public class ContextPromotionLoaderTest {
     @Test
     void promotionDateExceptionTest() {
         // given
-        Path dateFailTest = Paths.get("src/test/resources/promotionsFailDate.md");
+        Path dateFailTest = Paths.get("src/test/resources/promotions/promotionsFailDate.md");
 
         // when & then
         ContextPromotionLoader contextPromotionLoader = new ContextPromotionLoader();

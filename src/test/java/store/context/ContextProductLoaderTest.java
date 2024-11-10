@@ -17,7 +17,7 @@ public class ContextProductLoaderTest {
     @Test
     void productLoadSuccessTest() throws IOException {
         // given
-        Path productsTest = Paths.get("src/test/resources/productsSuccess.md");
+        Path productsTest = Paths.get("src/test/resources/products/productsSuccess.md");
 
         // when
         ProductRepository promotionRepository = new ContextProductLoader().initializeProducts(productsTest);
@@ -32,7 +32,7 @@ public class ContextProductLoaderTest {
     @Test
     void productNameExceptionTest() {
         // given
-        Path nameFailTest = Paths.get("src/test/resources/productsFailName.md");
+        Path nameFailTest = Paths.get("src/test/resources/products/productsFailName.md");
 
         // when & then
         ContextProductLoader contextProductLoader = new ContextProductLoader();
@@ -45,7 +45,7 @@ public class ContextProductLoaderTest {
     @Test
     void productQuantityExceptionTest() {
         // given
-        Path productsTest = Paths.get("src/test/resources/productsFailQuantity.md");
+        Path productsTest = Paths.get("src/test/resources/products/productsFailQuantity.md");
 
         // when & then
         ContextProductLoader contextProductLoader = new ContextProductLoader();
