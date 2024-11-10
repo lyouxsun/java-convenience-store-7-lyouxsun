@@ -52,4 +52,17 @@ public class ContextPromotionLoaderTest {
                 .isInstanceOf(DataValidationException.class)
                 .hasMessageContaining("[ERROR] 프로모션 상품 수량은 0 이상의 정수여야 합니다.");
     }
+
+    @DisplayName("프로모션 날짜 형식이 잘못되어 있으면 오류가 발생한다.")
+    @Test
+    void promotionDateExceptionTest() {
+        // given
+        Path dateFailTest = Paths.get("src/test/resources/promotionsFailDate.md");
+
+        // when & then
+        ContextPromotionLoader contextPromotionLoader = new ContextPromotionLoader();
+        Assertions.assertThatThrownBy(() -> contextPromotionLoader.initializePromotions(dateFailTest))
+                .isInstanceOf(DataValidationException.class)
+                .hasMessageContaining("[ERROR] 프로모션 날짜가 잘못된 형식으로 등록되어 있습니다.");
+    }
 }

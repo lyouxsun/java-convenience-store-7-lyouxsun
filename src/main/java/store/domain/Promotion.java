@@ -3,6 +3,7 @@ package store.domain;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class Promotion {
 
@@ -46,11 +47,14 @@ public class Promotion {
         return quantity;
     }
 
-    private static LocalDate validateDate(String date) {
-        if (date == null ||  date.isBlank()){
+    private static LocalDate validateDate(String rawDate) {
+        LocalDate date;
+        try {
+            date = LocalDate.parse(rawDate);
+        } catch (DateTimeParseException e) {
             throw new DataValidationException("[ERROR] 프로모션 날짜가 잘못된 형식으로 등록되어 있습니다.");
         }
-        return LocalDate.parse(date);
+        return date;
     }
 
     public String getName() {
