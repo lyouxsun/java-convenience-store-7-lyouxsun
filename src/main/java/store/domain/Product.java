@@ -60,9 +60,14 @@ public class Product {
 
     @Override
     public String toString() {
+        if (isPromotion) {
+            return "- " + name + " "
+                    + price + "원 "
+                    + quantity + "개 "
+                    + promotion + "\n";
+        }
         return "- " + name + " "
                 + price + "원 "
-                + quantity + "개 "
-                + promotion + "\n";
+                + quantity + "개\n";
     }
 }
