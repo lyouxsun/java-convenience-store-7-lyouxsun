@@ -2,10 +2,13 @@ package store.controller;
 
 import store.dto.InventoryDto;
 import store.service.StoreService;
+import store.utils.ExceptionUtils;
 import store.view.InputView;
 import store.view.OutputView;
 
 import java.util.*;
+
+import static store.utils.ExceptionUtils.*;
 
 public class StoreController {
 
@@ -25,10 +28,21 @@ public class StoreController {
     }
 
     private void showInventory() {
+        readInput();
+    }
+
+    private Map<String, String> readInput() {
         InventoryDto inventoryDto = storeService.findAllInventory();
         inputView.showInventory(inventoryDto);
-        String buy = inputView.requestPurchase();
-        Map<String, String> inputs = validateBuy(buy);
+        while(true){
+            try {
+                String buy = inputView.requestPurchase();
+                return validateBuy(buy);
+            } catch (IllegalArgumentException e) {
+                showException(e);
+            }
+        }
+
     }
 
     private Map<String, String> validateBuy(String buy) {
