@@ -35,4 +35,17 @@ public class PromotionTest {
                 .isInstanceOf(DataValidationException.class)
                 .hasMessageContaining("[ERROR] 프로모션 상품 수량은 0 이상의 정수여야 합니다.");
     }
+
+    @DisplayName("프로모션의 날짜가 형식에 맞지 않으면 예외가 발생한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"반짝할인,1,1,ㅓ2024-11-01,2024-11-30", "탄산2+1,2,1,2024y-01m-01d,2024-12-31"})
+    void nonValidDateExceptionTest(String promotionInput) {
+        // given
+        String[] promotionInfos = promotionInput.trim().split(",");
+
+        // when & then
+        assertThatThrownBy(() -> Promotion.from(promotionInfos))
+                .isInstanceOf(DataValidationException.class)
+                .hasMessageContaining("[ERROR] 프로모션 날짜가 잘못된 형식으로 등록되어 있습니다.");
+    }
 }
