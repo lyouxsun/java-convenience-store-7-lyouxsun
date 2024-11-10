@@ -39,7 +39,18 @@ public class ContextProductLoaderTest {
         Assertions.assertThatThrownBy(() -> contextProductLoader.initializeProducts(nameFailTest))
                 .isInstanceOf(DataValidationException.class)
                 .hasMessageContaining("[ERROR] 상품 이름이 잘못 등록되어 있습니다.");
-
     }
 
+    @DisplayName("상품 수량이 정수가 아니면 오류가 발생한다.")
+    @Test
+    void productQuantityExceptionTest() {
+        // given
+        Path productsTest = Paths.get("src/test/resources/productsFailQuantity.md");
+
+        // when & then
+        ContextProductLoader contextProductLoader = new ContextProductLoader();
+        Assertions.assertThatThrownBy(() -> contextProductLoader.initializeProducts(productsTest))
+                .isInstanceOf(DataValidationException.class)
+                .hasMessageContaining("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
+    }
 }

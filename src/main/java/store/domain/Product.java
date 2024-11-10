@@ -41,19 +41,11 @@ public class Product {
     private static long validatePriceAndQuantity(String numberInput) {
         String rawInput = numberInput.trim();
         validateNumber(rawInput);
-        long input = Long.parseLong(rawInput);
-        validateNumberScope(input);
-        return input;
+        return Long.parseLong(rawInput);
     }
 
     private static void validateNumber(String rawInput) {
         if (!rawInput.matches("\\d+")) {
-            throw new DataValidationException("[ERROR] 상품 가격과 수량은 정수여야 합니다. products.md 파일을 확인해주세요.");
-        }
-    }
-
-    private static void validateNumberScope(long input) {
-        if (input < 0) {
             throw new DataValidationException("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
         }
     }
