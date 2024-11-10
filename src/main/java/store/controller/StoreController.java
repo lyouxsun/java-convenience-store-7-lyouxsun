@@ -1,9 +1,14 @@
 package store.controller;
 
+import store.dto.InventoryDto;
+import store.dto.PurchaseDto;
 import store.service.StoreService;
+import store.view.InputView;
 import store.view.OutputView;
 
 import java.util.Map;
+
+import static store.enums.Messages.MEMBERSHIP_SALE;
 
 public class StoreController {
 
@@ -16,7 +21,9 @@ public class StoreController {
         outputView = new OutputView();
     }
 
-    public void run(Map<String, Integer> purchaseInput) {
+    public void run(Map<String, Integer> purchase) {
+        Map<String, PurchaseDto> purchaseResult = storeService.processPurchase(purchase);
+        InventoryDto inventoryDto = storeService.findAllInventory();
 
     }
 

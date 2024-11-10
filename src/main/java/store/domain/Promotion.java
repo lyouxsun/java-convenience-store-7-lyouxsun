@@ -77,4 +77,8 @@ public class Promotion {
                 '}';
     }
 
+    public int getPromotionQuantity(){
+        return this.buyQuantity + this.getQuantity;
+    }
+
 }

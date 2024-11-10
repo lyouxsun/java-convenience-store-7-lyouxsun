@@ -2,6 +2,7 @@ package store.repository;
 
 import store.domain.Product;
 import store.dto.InventoryDto;
+import store.dto.PurchaseDto;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -37,7 +38,27 @@ public class ProductRepository {
                 .sum();
     }
 
+    public Product findByNameAndPromotion(String name, boolean isPromotion) {
+        return products.stream()
+                .filter(product -> product.getName().equals(name))
+                .filter(product -> product.isPromotion() == isPromotion)
+                .findAny()
+                .orElse(null);
+    }
+
     public int getSize() {
         return products.size();
+    }
+
+    public void purchase(String productName, boolean isPromotion, PurchaseDto purchaseDto) {
+        Product product = findByNameAndPromotion(productName, isPromotion);
+        int hopeAmount = purchaseDto.getTotalAmount();
+        if (product.getQuantity() < hopeAmount) {
+            hopeAmount -= product.getQuantity();
+            product.reduceQuantity(product.getQuantity());
+            Product noPromotion = findByNameAndPromotion(productName, !isPromotion);
+            noPromotion.reduceQuantity(hopeAmount);
+        }
+
     }
 }
