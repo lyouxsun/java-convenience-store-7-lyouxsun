@@ -49,13 +49,13 @@ public class InputController {
                 .map(String::trim).toList();
         for (String item : buy) {
             String[] split = validateProductInput(item);
-            int amount = getAmount(split[1]);
+            int amount = validateAmount(split[1]);
             inputs.put(split[0], amount);
         }
         return inputs;
     }
 
-    private static int getAmount(String rawAmount) {
+    private static int validateAmount(String rawAmount) {
         try {
             return Integer.parseInt(rawAmount);
         } catch (NumberFormatException e) {
