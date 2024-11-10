@@ -19,6 +19,7 @@ public class ContextPromotionLoader {
             throw new IllegalArgumentException("[ERROR] 프로모션 목록을 입력받을 수 없습니다.");
         } catch (DataValidationException e){
             ExceptionUtils.showException(e);
+            throw e;
         }
         return promotionRepository;
     }

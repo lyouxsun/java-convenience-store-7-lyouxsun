@@ -32,7 +32,7 @@ public class Promotion {
     private static String validateName(String rawName) {
         String name = rawName.trim();
         if (name.isBlank()) {
-            throw new DataValidationException("[ERROR] 프로모션 상품 이름이 잘못 등록되어 있습니다.");
+            throw new DataValidationException("[ERROR] 프로모션 이름이 잘못 등록되어 있습니다.");
         }
         return name;
     }
