@@ -2,10 +2,10 @@ package store.dto;
 
 public class PurchaseDto {
 
-    private long onePrice;
-    private int totalPurchaseQuantity;
-    private int setNum;
-    private int oneSetQuantity;
+    private final long onePrice;
+    private final int totalPurchaseQuantity;
+    private final int setNum;
+    private final int oneSetQuantity;
 
 
     public PurchaseDto(long onePrice, int totalPurchaseQuantity, int setNum, int oneSetQuantity){
@@ -14,11 +14,6 @@ public class PurchaseDto {
         this.setNum = setNum;
         this.oneSetQuantity = oneSetQuantity;
 
-        System.out.println("onePrice = " + onePrice);
-        System.out.println("totalPurchaseQuantity = " + totalPurchaseQuantity);
-        System.out.println("setNum = " + setNum);
-        System.out.println("oneSetQuantity = " + oneSetQuantity);
-        System.out.println();
     }
 
     public int getTotalNum() {

@@ -1,6 +1,7 @@
 package store.domain;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
+import store.dto.ProductDto;
 import store.dto.PurchaseDto;
 import store.repository.PromotionRepository;
 import store.view.InputView;
@@ -10,10 +11,10 @@ import static store.enums.Messages.PROMOTION_MORE;
 
 public class Product {
 
-    private String name;
-    private long price;
+    private final String name;
+    private final long price;
     private int quantity;
-    private Promotion promotion;
+    private final Promotion promotion;
 
     private Product(String name, long price, int quantity, Promotion promotion) {
         this.name = name;
@@ -22,32 +23,11 @@ public class Product {
         this.promotion = promotion;
     }
 
-    public static Product from(String[] info) {
-        String name = validateName(info[0]);
-        long price = validatePriceAndQuantity(info[1]);
-        int quantity = validatePriceAndQuantity(info[2]);
-        Promotion promotion = PromotionRepository.fromName(info[3]);
+    public static Product from(ProductDto productDto, Promotion promotion) {
+        String name = productDto.getName();
+        long price = productDto.getPrice();
+        int quantity = productDto.getQuantity();
         return new Product(name, price, quantity, promotion);
-    }
-
-    private static String validateName(String rawName) {
-        String name = rawName.trim();
-        if (name.isBlank()) {
-            throw new DataValidationException("[ERROR] 상품 이름이 잘못 등록되어 있습니다.");
-        }
-        return name;
-    }
-
-    private static int validatePriceAndQuantity(String numberInput) {
-        String rawInput = numberInput.trim();
-        validateNumber(rawInput);
-        return Integer.parseInt(rawInput);
-    }
-
-    private static void validateNumber(String rawInput) {
-        if (!rawInput.matches("\\d+")) {
-            throw new DataValidationException("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
-        }
     }
 
     public boolean isPurchaseAvailable(long purchaseAmount) {

@@ -16,9 +16,9 @@ public class InputController {
     private final InputView inputView;
     private final PurchaseService purchaseService;
 
-    public InputController() {
+    public InputController(PurchaseService purchaseService) {
         inputView = new InputView();
-        purchaseService = new PurchaseService();
+        this.purchaseService = purchaseService;
     }
 
     public Map<String, Integer> getPurchaseInput() {

@@ -29,19 +29,19 @@ public class ProductRepository {
 
     public long findQuantityByName(String name) {
         boolean isPresent = products.stream()
-                .anyMatch(product -> product.getName().equals(name));
+                .anyMatch(product -> product.isSameName(name));
         if (!isPresent) {
             throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
         }
         return products.stream()
-                .filter(product -> product.getName().equals(name))
+                .filter(product -> product.isSameName(name))
                 .mapToLong(Product::getQuantity)
                 .sum();
     }
 
     public Product findByNameAndPromotion(String name, boolean isPromotion) {
         return products.stream()
-                .filter(product -> product.getName().equals(name))
+                .filter(product -> product.isSameName(name))
                 .filter(product -> product.isPromotion() == isPromotion)
                 .findAny()
                 .orElse(null);
@@ -65,7 +65,7 @@ public class ProductRepository {
 
     public long findAmountByName(String name) {
         Optional<Product> optionalProduct = products.stream()
-                .filter(product -> product.getName().equals(name))
+                .filter(product -> product.isSameName(name))
                 .findFirst();
         Product product = optionalProduct.get();
         return product.getQuantity();

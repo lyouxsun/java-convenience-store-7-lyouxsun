@@ -37,7 +37,7 @@ public class ProductTest {
 
         // then
         Assertions.assertThat(product.getName()).isEqualTo(productInfos[0]);
-        Assertions.assertThat(product.getAmount()).isEqualTo(Long.parseLong(productInfos[2]));
+        Assertions.assertThat(product.getPrice()).isEqualTo(Long.parseLong(productInfos[2]));
     }
 
     @DisplayName("상품의 가격과 수량이 정수가 아니면 예외가 발생한다.")

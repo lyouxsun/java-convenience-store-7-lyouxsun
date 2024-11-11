@@ -2,18 +2,17 @@ package store.dto;
 
 public record ResultDto(long totalAmount, long promotionAmount, long membershipAmount) {
 
-    public String getTotalAmount() {
-        return String.format("%,d", totalAmount);
+    public long getTotalAmount() {
+        return totalAmount;
     }
-    public String getPromotionAmount() {
-        return String.format("%,d", promotionAmount);
+    public long getPromotionAmount() {
+        return promotionAmount;
     }
-    public String getMembershipAmount() {
-        return String.format("%,d", membershipAmount);
+    public long getMembershipAmount() {
+        return membershipAmount;
     }
 
-    public String getTotalPaymentAmount() {
-        long totalPayment = totalAmount - promotionAmount - membershipAmount;
-        return String.format("%,d", totalPayment);
+    public long getTotalPaymentAmount() {
+        return totalAmount - promotionAmount - membershipAmount;
     }
 }

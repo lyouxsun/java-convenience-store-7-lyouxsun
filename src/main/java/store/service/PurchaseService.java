@@ -1,12 +1,10 @@
 package store.service;
 
-import store.context.ContextProductLoader;
 import store.domain.Product;
 import store.dto.InventoryDto;
 import store.dto.PurchaseDto;
 import store.repository.ProductRepository;
 
-import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -14,15 +12,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static store.enums.FilePath.PRODUCTS_FILE;
-
 public class PurchaseService {
     private final ProductRepository productRepository;
     Map<Product, Integer> noPromotionProducts = new LinkedHashMap<>();
 
-    public PurchaseService() {
-        this.productRepository = new ContextProductLoader()
-                .initializeProducts(Paths.get(PRODUCTS_FILE.path()));
+    public PurchaseService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public InventoryDto findAllInventory() {
@@ -46,7 +41,12 @@ public class PurchaseService {
     }
 
     public void processPromotion(Map<String, Integer> purchaseList, Map<String, PurchaseDto> purchaseResult) {
-        Set<Product> products = filterByPromotion(purchaseList, Objects::nonNull);
+        Set<Product> products = purchaseList.entrySet().stream()
+                .map(purchase -> productRepository.findByNameAndPromotion(purchase.getKey(), true))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+
         this.noPromotionProducts = new LinkedHashMap<>();
         for (Product promotionProduct : products) {
             int hopeAmount = purchaseList.get(promotionProduct.getName());
@@ -57,7 +57,13 @@ public class PurchaseService {
     }
 
     public void processNoPromotion(Map<String, Integer> purchaseList, Map<String, PurchaseDto> purchaseResult) {
-        Set<Product> noPromotionProducts = filterByPromotion(purchaseList, Objects::isNull);
+        Set<Product> noPromotionProducts = purchaseList.keySet().stream()
+                .map(productName -> {
+                    Product productWithPromotion = productRepository.findByNameAndPromotion(productName, true);
+                    return (productWithPromotion == null) ? productRepository.findByNameAndPromotion(productName, false) : null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
         for (Product noPromotionProduct : noPromotionProducts) {
             int hopeAmount = purchaseList.get(noPromotionProduct.getName());

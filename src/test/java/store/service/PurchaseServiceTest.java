@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import store.controller.InputController;
+import store.repository.ProductRepository;
 
 import java.util.Map;
 
@@ -11,9 +12,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class PurchaseServiceTest {
+    private final PurchaseService purchaseService = new PurchaseService(new ProductRepository());
+    private final InputController inputController = new InputController(purchaseService);
 
-    private final InputController inputController = new InputController();
-    private final PurchaseService purchaseService = new PurchaseService();
 
     @DisplayName("구매 수량이 재고보다 작거나 같은 경우 성공적으로 처리한다.")
     @ParameterizedTest

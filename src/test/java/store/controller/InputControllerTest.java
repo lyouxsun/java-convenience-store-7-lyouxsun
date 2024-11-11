@@ -3,6 +3,8 @@ package store.controller;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import store.repository.ProductRepository;
+import store.service.PurchaseService;
 
 import java.util.Map;
 
@@ -11,7 +13,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class InputControllerTest {
 
-    private final InputController inputController = new InputController();
+
+    PurchaseService purchaseService = new PurchaseService(new ProductRepository());
+    private final InputController inputController = new InputController(purchaseService);
 
     @DisplayName("구매 수량이 형식에 맞게 입력된 경우 성공적으로 처리한다")
     @ParameterizedTest

@@ -24,4 +24,8 @@ public class PromotionRepository {
     public static Promotion fromName(String name) {
         return promotions.get(name);
     }
+
+    public Promotion findByName(String name) {
+        return promotions.get(name);
+    }
 }

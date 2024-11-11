@@ -2,6 +2,7 @@ package store.controller;
 
 import store.dto.PurchaseDto;
 import store.dto.ResultDto;
+import store.repository.ProductRepository;
 import store.service.MembershipService;
 import store.service.PurchaseService;
 import store.view.InputView;
@@ -18,8 +19,8 @@ public class StoreController {
     private final OutputView outputView;
 
 
-    public StoreController() {
-        this.purchaseService = new PurchaseService();
+    public StoreController(ProductRepository productRepository) {
+        this.purchaseService = new PurchaseService(productRepository);
         this.membershipService = new MembershipService();
         outputView = new OutputView();
     }
@@ -28,7 +29,7 @@ public class StoreController {
         Map<String, PurchaseDto> purchaseResult = purchaseService.processPurchase(purchase);
         boolean isMembershipSale = InputView.requestYorN(MEMBERSHIP_SALE.getMessage());
         ResultDto resultDto = membershipService.calculateAmount(purchaseResult, isMembershipSale);
-        OutputView.showReceipt(purchaseResult, resultDto);
+        outputView.showReceipt(purchaseResult, resultDto);
     }
 
 }
