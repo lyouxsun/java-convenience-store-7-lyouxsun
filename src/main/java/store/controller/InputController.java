@@ -57,7 +57,7 @@ public class InputController {
     }
 
     public Map<String, Integer> validateBuy(String buyInput) {
-        Map<String, Integer> inputs = new HashMap<>();
+        Map<String, Integer> inputs = new LinkedHashMap<>();
         List<String> buy = Arrays.stream(buyInput.split(","))
                 .map(String::trim).toList();
         for (String item : buy) {
