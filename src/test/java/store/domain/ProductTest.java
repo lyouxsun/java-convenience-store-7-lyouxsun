@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static store.enums.ErrorMessages.PRODUCT_QUANTITY;
 
 public class ProductTest {
 
@@ -53,7 +54,7 @@ public class ProductTest {
         // when & then
         assertThatThrownBy(() -> ProductDto.from(productInfos))
                 .isInstanceOf(DataValidationException.class)
-                .hasMessageContaining("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
+                .hasMessageContaining(PRODUCT_QUANTITY.getMessage());
     }
 
     @DisplayName("상품의 프로모션 정보가 있는 경우 프로모션이 있다고 저장해야 한다.")

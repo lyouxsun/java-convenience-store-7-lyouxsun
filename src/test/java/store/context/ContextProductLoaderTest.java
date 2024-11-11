@@ -17,16 +17,9 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static store.enums.ErrorMessages.PRODUCT_QUANTITY;
 
 public class ContextProductLoaderTest {
-
-    private PromotionRepository promotionRepository;
-
-    @BeforeEach
-    void setUp() throws IOException {
-        Path promotionTest = Paths.get("src/test/resources/promotions/promotionsSuccess.md");
-        this.promotionRepository = new ContextPromotionLoader().initializePromotions(promotionTest);
-    }
 
     @DisplayName("상품 목록이 정상적으로 입력된 경우")
     @Test
@@ -70,6 +63,6 @@ public class ContextProductLoaderTest {
         ContextProductLoader contextProductLoader = new ContextProductLoader();
         assertThatThrownBy(() -> contextProductLoader.initializeProducts(productsTest))
                 .isInstanceOf(DataValidationException.class)
-                .hasMessageContaining("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
+                .hasMessageContaining(PRODUCT_QUANTITY.getMessage());
     }
 }
