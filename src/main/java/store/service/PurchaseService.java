@@ -31,7 +31,6 @@ public class PurchaseService {
     }
 
     public Map<String, PurchaseDto> processPurchase(Map<String, Integer> purchaseList) {
-
         for (Map.Entry<String, Integer> entry : purchaseList.entrySet()) {
             Product product = productRepository.findByName(entry.getKey());
             processPromotion(product, entry.getValue());
@@ -41,15 +40,16 @@ public class PurchaseService {
     }
 
     public void processPromotion(Product product, int hopeQuantity) {
-        if (product.isPromotion()){
-            PurchaseDto purchaseDto = product.getPromotionAmount(hopeQuantity);
-            purchaseResult.put(product.getName(), purchaseDto);
-            productRepository.purchase(product, true, purchaseDto);
-            return;
-        }
-        PurchaseDto purchaseDto = new PurchaseDto(product.getPrice(), hopeQuantity, 0, 0);
+        PurchaseDto purchaseDto = createPurchaseDto(product, hopeQuantity);
         purchaseResult.put(product.getName(), purchaseDto);
-        productRepository.purchase(product, false, purchaseDto);
+        productRepository.purchase(product, product.isPromotion(), purchaseDto);
+    }
+
+    private PurchaseDto createPurchaseDto(Product product, int hopeQuantity) {
+        if (product.isPromotion()) {
+            return product.getPromotionAmount(hopeQuantity);
+        }
+        return new PurchaseDto(product.getPrice(), hopeQuantity, 0, 0);
     }
 
 }
