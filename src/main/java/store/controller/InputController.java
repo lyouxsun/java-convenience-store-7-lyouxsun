@@ -1,7 +1,7 @@
 package store.controller;
 
 import store.dto.InventoryDto;
-import store.service.StoreService;
+import store.service.PurchaseService;
 import store.view.InputView;
 
 import java.util.Arrays;
@@ -14,11 +14,11 @@ import static store.utils.ExceptionUtils.showException;
 public class InputController {
 
     private final InputView inputView;
-    private final StoreService storeService;
+    private final PurchaseService purchaseService;
 
     public InputController() {
         inputView = new InputView();
-        storeService = new StoreService();
+        purchaseService = new PurchaseService();
     }
 
     public Map<String, Integer> getPurchaseInput() {
@@ -27,7 +27,7 @@ public class InputController {
     }
 
     public void showInventory() {
-        InventoryDto inventoryDto = storeService.findAllInventory();
+        InventoryDto inventoryDto = purchaseService.findAllInventory();
         inputView.showInventory(inventoryDto);
     }
 
@@ -36,7 +36,7 @@ public class InputController {
             try {
                 String buy = inputView.requestPurchase();
                 Map<String, Integer> inputs = validateBuy(buy);
-                storeService.validateInputs(inputs);
+                purchaseService.validateInputs(inputs);
                 return inputs;
             } catch (IllegalArgumentException e) {
                 showException(e);

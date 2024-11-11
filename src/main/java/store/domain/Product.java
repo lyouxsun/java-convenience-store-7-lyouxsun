@@ -75,10 +75,6 @@ public class Product {
                 + quantity + "개\n";
     }
 
-    public long getAmount() {
-        return quantity;
-    }
-
     public boolean isPromotion() {
         if (promotion == null) {
             return false;
@@ -86,7 +82,7 @@ public class Product {
         return this.promotion.isBetweenDates();
     }
 
-    public PurchaseDto getPromotionAmount(int purchaseAmount) {
+    public PurchaseDto getPromotionAmount(final int purchaseAmount) {
 
         // 2+1이면 3, 1+1이면 2를 리턴
         int setQuantity = promotion.getPromotionQuantity();
@@ -105,17 +101,17 @@ public class Product {
             boolean yes = InputView.requestYorN(PROMOTION_MORE.format(name));
             if (yes) {
                 setNum++;
-                return new PurchaseDto(purchaseAmount+1, setNum + 1, setQuantity);
+                return new PurchaseDto(price, purchaseAmount+1, setNum + 1, setQuantity);
             }
         }
 
         if (noPromotionNum > 1) {
-            boolean yes = InputView.requestYorN(NO_PROMOTION.format(name, noPromotionNum));
-            if (!yes) {
-                return new PurchaseDto(setQuantity * setNum, setNum, setQuantity);
+            boolean noPromotion = InputView.requestYorN(NO_PROMOTION.format(name, noPromotionNum));
+            if (noPromotion) {
+                return new PurchaseDto(price, purchaseAmount, setNum, setQuantity);
             }
         }
-        return new PurchaseDto(purchaseAmount, setNum, setQuantity);
+        return new PurchaseDto(price, purchaseAmount, setNum, setQuantity);
     }
 
     private boolean morePromotion(int purchaseAmount, int promotionSet) {
@@ -132,5 +128,9 @@ public class Product {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public long getPrice(){
+        return price;
     }
 }

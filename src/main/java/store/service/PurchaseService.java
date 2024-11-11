@@ -1,0 +1,77 @@
+package store.service;
+
+import store.context.ContextProductLoader;
+import store.domain.Product;
+import store.dto.InventoryDto;
+import store.dto.PurchaseDto;
+import store.repository.ProductRepository;
+
+import java.nio.file.Paths;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static store.enums.FilePath.PRODUCTS_FILE;
+
+public class PurchaseService {
+    private final ProductRepository productRepository;
+    Map<Product, Integer> noPromotionProducts = new LinkedHashMap<>();
+
+    public PurchaseService() {
+        this.productRepository = new ContextProductLoader()
+                .initializeProducts(Paths.get(PRODUCTS_FILE.path()));
+    }
+
+    public InventoryDto findAllInventory() {
+        return productRepository.productsToDto();
+    }
+
+    public void validateInputs(Map<String, Integer> inputs) {
+        for (Map.Entry<String, Integer> entry : inputs.entrySet()) {
+            long quantity = productRepository.findQuantityByName(entry.getKey());
+            if (quantity < entry.getValue()) {
+                throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+            }
+        }
+    }
+
+    public Map<String, PurchaseDto> processPurchase(Map<String, Integer> purchaseList) {
+        Map<String, PurchaseDto> purchaseResult = new LinkedHashMap<>();
+        processPromotion(purchaseList, purchaseResult);
+        processNoPromotion(purchaseList, purchaseResult);
+        return purchaseResult;
+    }
+
+    public void processPromotion(Map<String, Integer> purchaseList, Map<String, PurchaseDto> purchaseResult) {
+        Set<Product> products = filterByPromotion(purchaseList, Objects::nonNull);
+        this.noPromotionProducts = new LinkedHashMap<>();
+        for (Product promotionProduct : products) {
+            int hopeAmount = purchaseList.get(promotionProduct.getName());
+            PurchaseDto purchaseDto = promotionProduct.getPromotionAmount(hopeAmount);
+            purchaseResult.put(promotionProduct.getName(), purchaseDto);
+            productRepository.purchase(promotionProduct.getName(), true, purchaseDto);
+        }
+    }
+
+    public void processNoPromotion(Map<String, Integer> purchaseList, Map<String, PurchaseDto> purchaseResult) {
+        Set<Product> noPromotionProducts = filterByPromotion(purchaseList, Objects::isNull);
+
+        for (Product noPromotionProduct : noPromotionProducts) {
+            int hopeAmount = purchaseList.get(noPromotionProduct.getName());
+            PurchaseDto purchaseDto = new PurchaseDto(noPromotionProduct.getPrice(), hopeAmount, 0, 0);
+            purchaseResult.put(noPromotionProduct.getName(), purchaseDto);
+
+            productRepository.purchase(noPromotionProduct.getName(), false, purchaseDto);
+        }
+    }
+
+    private Set<Product> filterByPromotion(Map<String, Integer> purchaseList, Predicate<Product> predicate) {
+        return purchaseList.entrySet().stream()
+                .map(purchase -> productRepository.findByNameAndPromotion(purchase.getKey(), true))
+                .filter(predicate)
+                .collect(Collectors.toSet());
+    }
+}

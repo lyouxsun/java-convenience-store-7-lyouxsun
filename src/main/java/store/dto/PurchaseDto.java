@@ -1,14 +1,24 @@
 package store.dto;
 
-public record PurchaseDto(int totalPurchaseQuantity, int setNum, int oneSetQuantity) {
-    public PurchaseDto {
-        validateNumber();
-    }
+public class PurchaseDto {
 
-    private void validateNumber() {
-        if (totalPurchaseQuantity < 0 || setNum < 0 || oneSetQuantity < 0) {
-            throw new IllegalArgumentException("[ERROR] 수량은 항상 0 이상의 정수여야 합니다.");
-        }
+    private long onePrice;
+    private int totalPurchaseQuantity;
+    private int setNum;
+    private int oneSetQuantity;
+
+
+    public PurchaseDto(long onePrice, int totalPurchaseQuantity, int setNum, int oneSetQuantity){
+        this.onePrice = onePrice;
+        this.totalPurchaseQuantity = totalPurchaseQuantity;
+        this.setNum = setNum;
+        this.oneSetQuantity = oneSetQuantity;
+
+        System.out.println("onePrice = " + onePrice);
+        System.out.println("totalPurchaseQuantity = " + totalPurchaseQuantity);
+        System.out.println("setNum = " + setNum);
+        System.out.println("oneSetQuantity = " + oneSetQuantity);
+        System.out.println();
     }
 
     public int getTotalNum() {
@@ -21,7 +31,15 @@ public record PurchaseDto(int totalPurchaseQuantity, int setNum, int oneSetQuant
     public int getSetNum() {
         return setNum;
     }
-    public int getPromotionSet() {
-        return setNum * oneSetQuantity;
+    public long getPromotionSetPrice() {
+        return onePrice * setNum * oneSetQuantity;
+    }
+
+    public long getTotalPrice(){
+        return onePrice * totalPurchaseQuantity;
+    }
+
+    public long promotionSalePrice(){
+        return onePrice * setNum;
     }
 }

@@ -35,7 +35,7 @@ public class ProductRepository {
         }
         return products.stream()
                 .filter(product -> product.getName().equals(name))
-                .mapToLong(Product::getAmount)
+                .mapToLong(Product::getQuantity)
                 .sum();
     }
 
@@ -68,6 +68,6 @@ public class ProductRepository {
                 .filter(product -> product.getName().equals(name))
                 .findFirst();
         Product product = optionalProduct.get();
-        return product.getAmount();
+        return product.getQuantity();
     }
 }

@@ -10,10 +10,10 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class StoreServiceTest {
+public class PurchaseServiceTest {
 
     private final InputController inputController = new InputController();
-    private final StoreService storeService = new StoreService();
+    private final PurchaseService purchaseService = new PurchaseService();
 
     @DisplayName("구매 수량이 재고보다 작거나 같은 경우 성공적으로 처리한다.")
     @ParameterizedTest
@@ -23,7 +23,7 @@ public class StoreServiceTest {
         Map<String, Integer> tests = inputController.validateBuy(buy);
 
         // when & then
-        assertDoesNotThrow(() -> storeService.validateInputs(tests));
+        assertDoesNotThrow(() -> purchaseService.validateInputs(tests));
     }
 
     @DisplayName("구매 수량이 재고보다 작거나 같은 경우 성공적으로 처리한다.")
@@ -34,7 +34,7 @@ public class StoreServiceTest {
         Map<String, Integer> tests = inputController.validateBuy(buy);
 
         // when & then
-        assertThatThrownBy(() -> storeService.validateInputs(tests))
+        assertThatThrownBy(() -> purchaseService.validateInputs(tests))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
     }
