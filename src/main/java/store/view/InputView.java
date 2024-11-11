@@ -24,17 +24,20 @@ public class InputView {
             try {
                 System.out.println(message);
                 String input = Console.readLine().trim();
-                if (input.equals("Y") || input.equals("y")) {
-                    return true;
-                }
-                if (input.equals("N") || input.equals("n")) {
-                    return false;
-                }
-                throw new IllegalArgumentException(INVALID_INPUT.getMessage());
+                return validateYesNoInput(input);
             } catch (IllegalArgumentException e) {
                 ExceptionUtils.showException(e);
             }
         }
+    }
+    private static boolean validateYesNoInput(String input) {
+        if (input.equalsIgnoreCase("Y")) {
+            return true;
+        }
+        if (input.equalsIgnoreCase("N")) {
+            return false;
+        }
+        throw new IllegalArgumentException(INVALID_INPUT.getMessage());
     }
 
 }

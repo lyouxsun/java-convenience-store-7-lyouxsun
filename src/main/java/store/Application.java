@@ -1,22 +1,18 @@
 package store;
 
-import store.context.ConfigProduct;
 import store.context.ContextProductLoader;
 import store.context.ContextPromotionLoader;
 import store.controller.InputController;
 import store.controller.StoreController;
-import store.domain.Product;
-import store.domain.Promotion;
 import store.dto.ProductDto;
 import store.repository.ProductRepository;
 import store.repository.PromotionRepository;
 import store.service.PurchaseService;
 
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 
-import static store.context.ConfigProduct.*;
+import static store.context.ConfigProduct.getProductRepository;
 import static store.enums.FilePath.PRODUCTS_FILE;
 import static store.enums.FilePath.PROMOTION_FILE;
 
