@@ -14,16 +14,14 @@ import java.util.Map;
 public class ContextProductLoader {
 
     public Map<String, ProductDto> initializeProducts(Path productsList) {
-        Map<String, ProductDto> productDtos;
         try {
-            productDtos = loadProductContext(productsList);
+            return loadProductContext(productsList);
         } catch (IOException e) {
             throw new IllegalArgumentException("[ERROR] 상품 목록을 입력받을 수 없습니다.");
         } catch (DataValidationException e) {
             ExceptionUtils.showException(e);
             throw e;
         }
-        return productDtos;
     }
 
     private static Map<String, ProductDto> loadProductContext(Path productsList) throws IOException {
@@ -31,15 +29,17 @@ public class ContextProductLoader {
         List<String[]> strings = Files.lines(productsList).skip(1)
                 .map(line -> line.split(","))
                 .toList();
+        initializeProductDtos(strings, productDtos);
+        return productDtos;
+    }
 
+    private static void initializeProductDtos(List<String[]> strings, Map<String, ProductDto> productDtos) {
         for (String[] string : strings) {
+            productDtos.computeIfAbsent(string[0], key -> ProductDto.from(string));
             productDtos.computeIfPresent(string[0], (key, productDto) -> {
                 productDto.setInfo(string);
                 return productDto;
             });
-
-            productDtos.computeIfAbsent(string[0], key -> ProductDto.from(string));
         }
-        return productDtos;
     }
 }

@@ -78,9 +78,15 @@ public class ProductDto {
         int quantity = validateQuantity(info[2]);
         if (info[3].equals("null")) {       // 일반재고 재등록
             this.originalQuantity = quantity;
+            return;
         }
         // 할인재고 재등록
         this.promotion = info[3];
         this.promotionQuantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "[name=" + name + ", price=" + price + ", promotion=" + promotion + ", promotionQ=" + promotionQuantity + ", originalQ=" + originalQuantity + "]";
     }
 }

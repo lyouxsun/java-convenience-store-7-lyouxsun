@@ -26,8 +26,8 @@ public class PurchaseService {
 
     public void validateInputs(Map<String, Integer> inputs) {
         for (Map.Entry<String, Integer> entry : inputs.entrySet()) {
-            long quantity = productRepository.findQuantityByName(entry.getKey());
-            if (quantity < entry.getValue()) {
+            boolean availablePurchase = productRepository.availablePurchase(entry.getKey(), entry.getValue());
+            if (!availablePurchase) {
                 throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
             }
         }
@@ -35,9 +35,16 @@ public class PurchaseService {
 
     public Map<String, PurchaseDto> processPurchase(Map<String, Integer> purchaseList) {
         Map<String, PurchaseDto> purchaseResult = new LinkedHashMap<>();
-        processPromotion(purchaseList, purchaseResult);
-        processNoPromotion(purchaseList, purchaseResult);
-        return purchaseResult;
+//        processPromotion(purchaseList, purchaseResult);
+//        processNoPromotion(purchaseList, purchaseResult);
+//        return purchaseResult;
+
+        for (Map.Entry<String, Integer> entry : purchaseList.entrySet()) {
+            Product product = productRepository.findByName(entry.getKey());
+
+        }
+        return null;
+
     }
 
     public void processPromotion(Map<String, Integer> purchaseList, Map<String, PurchaseDto> purchaseResult) {
@@ -52,7 +59,7 @@ public class PurchaseService {
             int hopeAmount = purchaseList.get(promotionProduct.getName());
             PurchaseDto purchaseDto = promotionProduct.getPromotionAmount(hopeAmount);
             purchaseResult.put(promotionProduct.getName(), purchaseDto);
-            productRepository.purchase(promotionProduct.getName(), true, purchaseDto);
+//            productRepository.purchase(promotionProduct.getName(), true, purchaseDto);
         }
     }
 
@@ -70,7 +77,7 @@ public class PurchaseService {
             PurchaseDto purchaseDto = new PurchaseDto(noPromotionProduct.getPrice(), hopeAmount, 0, 0);
             purchaseResult.put(noPromotionProduct.getName(), purchaseDto);
 
-            productRepository.purchase(noPromotionProduct.getName(), false, purchaseDto);
+//            productRepository.purchase(noPromotionProduct.getName(), false, purchaseDto);
         }
     }
 

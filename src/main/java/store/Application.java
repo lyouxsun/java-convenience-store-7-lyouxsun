@@ -26,6 +26,8 @@ public class Application {
         Map<String, ProductDto> productDtos = getProductDtos(promotionRepository);
         ProductRepository productRepository = getProductRepository(promotionRepository, productDtos);
 
+
+
         PurchaseService purchaseService = new PurchaseService(productRepository);
         StoreController storeController = new StoreController(purchaseService);
         InputController inputController = new InputController(purchaseService);

@@ -58,14 +58,14 @@ public class Product {
             String promotionProduct = String.format("- %s %,d원 %s %s\n",
                     name,
                     price,
-                    quantityToString(originalQuantity),
+                    quantityToString(promotionQuantity),
                     promotion.getName());
             sb.append(promotionProduct);
         }
         String noPromotionProduct = String.format("- %s %,d원 %s\n",
                 name,
                 price,
-                quantityToString(promotionQuantity));
+                quantityToString(originalQuantity));
         sb.append(noPromotionProduct);
         return sb.toString();
     }
@@ -121,8 +121,8 @@ public class Product {
         throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
     }
 
-    public int getOriginalQuantity() {
-        return promotionQuantity;
+    public int getQuantity() {
+        return originalQuantity + promotionQuantity;
     }
 
     public long getPrice() {
