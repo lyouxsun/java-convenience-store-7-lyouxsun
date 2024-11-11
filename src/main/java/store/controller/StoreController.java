@@ -28,7 +28,7 @@ public class StoreController {
         Map<String, PurchaseDto> purchaseResult = purchaseService.processPurchase(purchase);
         boolean isMembershipSale = InputView.requestYorN(MEMBERSHIP_SALE.getMessage());
         ResultDto resultDto = membershipService.calculateAmount(purchaseResult, isMembershipSale);
-//        OutputView.showReceipt(purchaseResult, resultDto);
+        OutputView.showReceipt(purchaseResult, resultDto);
     }
 
 }
