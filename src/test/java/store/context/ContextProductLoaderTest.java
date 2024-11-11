@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,8 +39,12 @@ public class ContextProductLoaderTest {
         int productsCount = productDtos.size();
 
         // then
-        long lineCount = Files.lines(productsTest).count();
-        assertThat(productsCount).isEqualTo(lineCount - 1);
+        Set<String> names = Files.lines(productsTest)
+                .skip(1)
+                .map(line -> line.split(",")[0])
+                .collect(Collectors.toSet());
+
+        assertThat(productsCount).isEqualTo(names.size());
     }
 
     @DisplayName("상품명이 적혀있지 않은 경우 예외가 발생한다")

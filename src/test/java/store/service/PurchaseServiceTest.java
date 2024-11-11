@@ -8,13 +8,11 @@ import store.context.ContextProductLoader;
 import store.context.ContextPromotionLoader;
 import store.controller.InputController;
 import store.dto.ProductDto;
-import store.repository.ProductRepository;
 import store.repository.PromotionRepository;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

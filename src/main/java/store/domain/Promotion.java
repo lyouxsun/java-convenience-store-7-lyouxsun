@@ -1,8 +1,11 @@
 package store.domain;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Promotion {
@@ -10,10 +13,10 @@ public class Promotion {
     private String name;
     private int buyQuantity;
     private int getQuantity;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
-    private Promotion(String name, int buyQuantity, int getQuantity, LocalDate startDate, LocalDate endDate) {
+    private Promotion(String name, int buyQuantity, int getQuantity, LocalDateTime startDate, LocalDateTime endDate) {
         this.name = name;
         this.buyQuantity = buyQuantity;
         this.getQuantity = getQuantity;
@@ -25,8 +28,8 @@ public class Promotion {
         String name = validateName(info[0]);
         int buyQuantity = validateQuantity(info[1]);
         int getQuantity = validateQuantity(info[2]);
-        LocalDate startDate = validateDate(info[3]);
-        LocalDate endDate = validateDate(info[4]);
+        LocalDateTime startDate = validateDate(info[3]);
+        LocalDateTime endDate = validateDate(info[4]);
         return new Promotion(name, buyQuantity, getQuantity, startDate, endDate);
     }
 
@@ -47,14 +50,14 @@ public class Promotion {
         return quantity;
     }
 
-    private static LocalDate validateDate(String rawDate) {
-        LocalDate date;
+    private static LocalDateTime validateDate(String rawDate) {
         try {
-            date = LocalDate.parse(rawDate);
+            LocalDate date = LocalDate.parse(rawDate, DateTimeFormatter.ISO_LOCAL_DATE);
+            return date.atStartOfDay();
+//            return LocalDateTime.parse(rawDate, DateTimeFormatter.ISO_LOCAL_DATE);
         } catch (DateTimeParseException e) {
             throw new DataValidationException("[ERROR] 프로모션 날짜가 잘못된 형식으로 등록되어 있습니다.");
         }
-        return date;
     }
 
     public String getName() {
@@ -62,7 +65,7 @@ public class Promotion {
     }
 
     public boolean isBetweenDates(){
-        LocalDate now = LocalDate.now();
+        LocalDateTime now = DateTimes.now();
         return now.isAfter(startDate) && now.isBefore(endDate);
     }
 
