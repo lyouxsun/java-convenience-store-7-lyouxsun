@@ -1,5 +1,7 @@
 package store.enums;
 
+import java.text.DecimalFormat;
+
 public enum ReceiptMessages {
 
     STORE_INFO("==============W 편의점================"),
@@ -9,8 +11,8 @@ public enum ReceiptMessages {
     PROMOTION_LIST_FORMAT("%-10s\t\t\t%2d"),
     LINE("===================================="),
     TOTAL_AMOUNT_INFO("총구매액\t\t\t\t%2d\t%,12d"),
-    PROMOTION_AMOUNT_INFO("행사할인\t\t\t\t\t%,12d"),
-    MEMBERSHIP_AMOUNT_INFO("멤버십할인\t\t\t\t\t%,12d"),
+    PROMOTION_AMOUNT_INFO("행사할인\t\t\t\t\t%12s"),
+    MEMBERSHIP_AMOUNT_INFO("멤버십할인\t\t\t\t\t%12s"),
     TOTAL_PAYMENT_AMOUNT_INFO("내실돈\t\t\t\t\t%,12d");
 
 
@@ -34,6 +36,11 @@ public enum ReceiptMessages {
 
     public String format(int num, long amount) {
         return String.format(message, num, amount);
+    }
+
+    public String formatNegative(long amount) {
+        DecimalFormat formatter = new DecimalFormat("-#,##0");
+        return String.format(message, formatter.format(amount));
     }
 
     public String format(long amount) {

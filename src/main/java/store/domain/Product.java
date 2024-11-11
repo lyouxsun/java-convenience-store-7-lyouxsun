@@ -35,10 +35,6 @@ public class Product {
         return originalQuantity + promotionQuantity >= purchaseAmount;
     }
 
-    public boolean isSameName(String name) {
-        return this.name.equals(name);
-    }
-
     public String getName() {
         return name;
     }

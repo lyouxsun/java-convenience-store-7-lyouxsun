@@ -1,6 +1,5 @@
 package store.repository;
 
-import store.domain.Product;
 import store.domain.Promotion;
 
 import java.util.LinkedHashMap;
@@ -17,12 +16,8 @@ public class PromotionRepository {
         promotions.put(promotion.getName(), promotion);
     }
 
-    public int getSize(){
+    public int getSize() {
         return promotions.size();
-    }
-
-    public static Promotion fromName(String name) {
-        return promotions.get(name);
     }
 
     public Promotion findByName(String name) {

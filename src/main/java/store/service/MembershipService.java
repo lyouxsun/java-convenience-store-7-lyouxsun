@@ -5,15 +5,18 @@ import store.dto.ResultDto;
 
 import java.util.Map;
 
+import static store.enums.SaleValues.MEMBERSHIP_DISCOUNT_LIMIT;
+import static store.enums.SaleValues.MEMBERSHIP_DISCOUNT_RATE;
+
 public class MembershipService {
     public ResultDto calculateAmount(Map<String, PurchaseDto> purchaseResult, boolean isMembershipSale) {
         long totalAmount = getTotalAmount(purchaseResult);
         long promotionAmount = getPromotionAmount(purchaseResult);
-        long membershipAmount = 0;
         if (isMembershipSale) {
-            membershipAmount = getMembershipAmount(purchaseResult, totalAmount);
+            long membershipAmount = getMembershipAmount(purchaseResult, totalAmount);
+            return new ResultDto(totalAmount, promotionAmount, membershipAmount);
         }
-        return new ResultDto(totalAmount, promotionAmount, membershipAmount);
+        return new ResultDto(totalAmount, promotionAmount, 0);
     }
 
     private long getTotalAmount(Map<String, PurchaseDto> purchaseResult) {
@@ -30,17 +33,11 @@ public class MembershipService {
     }
 
     private long getMembershipAmount(Map<String, PurchaseDto> purchaseResult, long totalAmount) {
-        long membershipTarget = totalAmount;
         long promotionAmount = purchaseResult.values().stream()
                 .filter(PurchaseDto::isPromotion)
                 .mapToLong(PurchaseDto::getPromotionSetPrice)
                 .sum();
-        membershipTarget -= promotionAmount;
-
-        membershipTarget *= 0.3;
-        if (membershipTarget < 8_000L) {
-            return membershipTarget;
-        }
-        return 8_000;
+        long membershipTarget = (long) ((totalAmount - promotionAmount) * MEMBERSHIP_DISCOUNT_RATE.valueToDouble());
+        return Math.min(membershipTarget, MEMBERSHIP_DISCOUNT_LIMIT.valueToLong());
     }
 }

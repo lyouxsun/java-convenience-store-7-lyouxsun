@@ -2,9 +2,11 @@ package store.repository;
 
 import store.domain.Product;
 import store.dto.InventoryDto;
-import store.dto.PurchaseDto;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static store.enums.ErrorMessages.PRODUCT_NOT_FOUND;
 
 public class ProductRepository {
     private final Map<String, Product> products;
@@ -28,7 +30,7 @@ public class ProductRepository {
     public boolean availablePurchase(String name, int hopeQuantity) {
         Product product = products.get(name);
         if (product == null) {
-            throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
+            throw new IllegalArgumentException(PRODUCT_NOT_FOUND.getMessage());
         }
         return product.isPurchaseAvailable(hopeQuantity);
     }
