@@ -10,6 +10,7 @@ import store.view.OutputView;
 import java.util.Map;
 
 import static store.enums.Messages.MEMBERSHIP_SALE;
+import static store.enums.Messages.PURCHASE_MORE;
 
 public class StoreController {
 
@@ -24,11 +25,12 @@ public class StoreController {
         outputView = new OutputView();
     }
 
-    public void run(Map<String, Integer> purchase) {
+    public boolean run(Map<String, Integer> purchase) {
         Map<String, PurchaseDto> purchaseResult = purchaseService.processPurchase(purchase);
         boolean isMembershipSale = InputView.requestYorN(MEMBERSHIP_SALE.getMessage());
         ResultDto resultDto = membershipService.calculateAmount(purchaseResult, isMembershipSale);
         outputView.showReceipt(purchaseResult, resultDto);
+        return InputView.requestYorN(PURCHASE_MORE.getMessage());
     }
 
 }

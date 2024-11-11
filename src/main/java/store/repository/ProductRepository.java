@@ -33,10 +33,6 @@ public class ProductRepository {
         return product.isPurchaseAvailable(hopeQuantity);
     }
 
-    public void purchase(Product product, boolean isPromotion, PurchaseDto purchaseDto) {
-        int hopeAmount = purchaseDto.getTotalNum();
-        product.reduceQuantity(hopeAmount);
-    }
 
     public Product findByName(String name) {
         return products.get(name);

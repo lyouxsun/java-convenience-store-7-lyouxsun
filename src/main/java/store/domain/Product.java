@@ -92,18 +92,9 @@ public class Product {
             return handleAdditionalPromotion(purchaseAmount, setNum, oneSet, price);
         }
         if (shouldProceedWithoutPromotion(noPromotionNum)) {
-            return new PurchaseDto(price, purchaseAmount, setNum, oneSet);
+            return new PurchaseDto(price, setNum * oneSet, setNum, oneSet);
         }
         return new PurchaseDto(price, purchaseAmount, setNum, oneSet);
-    }
-
-    private static PurchaseDto handleAdditionalPromotion(int purchaseAmount, int setNum, int oneSet, long price) {
-        setNum++;
-        return new PurchaseDto(price, purchaseAmount + 1, setNum + 1, oneSet);
-    }
-
-    private boolean shouldProceedWithoutPromotion(int noPromotionNum) {
-        return noPromotionNum > 1 && InputView.requestYorN(NO_PROMOTION.format(name, noPromotionNum));
     }
 
     private int calculateSetNum(int purchaseAmount, int oneSet) {
@@ -118,17 +109,37 @@ public class Product {
         return morePromotion(purchaseAmount, oneSet) && InputView.requestYorN(PROMOTION_MORE.format(name));
     }
 
+    private static PurchaseDto handleAdditionalPromotion(int purchaseAmount, int setNum, int oneSet, long price) {
+        return new PurchaseDto(price, purchaseAmount + 1, setNum + 1, oneSet);
+    }
+
+    private boolean shouldProceedWithoutPromotion(int noPromotionNum) {
+        if(noPromotionNum < 1){
+            return false;
+        }
+        boolean condition2 = InputView.requestYorN(NO_PROMOTION.format(name, noPromotionNum));
+        return !condition2;
+    }
+
     private boolean morePromotion(int purchaseAmount, int promotionSet) {
         return (purchaseAmount + 1) <= promotionQuantity && ((purchaseAmount + 1) % promotionSet == 0);
     }
 
     public void reduceQuantity(int hope) {
-        if (promotionQuantity < hope) {
-            hope -= promotionQuantity;
-            promotionQuantity = 0;
-            originalQuantity -= hope;
+        if (promotionQuantity > 0 && promotionQuantity >= hope){
+            promotionQuantity -= hope;
             return;
         }
+        if (promotionQuantity > 0){
+            reduceBoth(hope);
+            return;
+        }
+        originalQuantity -= hope;
+    }
+
+    private void reduceBoth(int hope) {
+        hope -= promotionQuantity;
+        promotionQuantity = 0;
         originalQuantity -= hope;
     }
 

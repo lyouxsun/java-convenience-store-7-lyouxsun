@@ -17,6 +17,7 @@ import static store.enums.FilePath.PRODUCTS_FILE;
 import static store.enums.FilePath.PROMOTION_FILE;
 
 public class Application {
+
     public static void main(String[] args) {
         PromotionRepository promotionRepository = getPromotionRepository();
         Map<String, ProductDto> productDtos = getProductDtos(promotionRepository);
@@ -25,8 +26,12 @@ public class Application {
         PurchaseService purchaseService = new PurchaseService(productRepository);
         StoreController storeController = new StoreController(purchaseService);
         InputController inputController = new InputController(purchaseService);
-        Map<String, Integer> purchaseInput = inputController.getPurchaseInput();
-        storeController.run(purchaseInput);
+        while (true){
+            Map<String, Integer> purchaseInput = inputController.getPurchaseInput();
+            if (!storeController.run(purchaseInput)){
+                break;
+            }
+        }
     }
 
     private static PromotionRepository getPromotionRepository() {

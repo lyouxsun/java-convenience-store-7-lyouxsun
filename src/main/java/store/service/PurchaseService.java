@@ -8,6 +8,8 @@ import store.repository.ProductRepository;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static store.enums.ErrorMessages.QUANTITY_OVERFLOW;
+
 public class PurchaseService {
     private final ProductRepository productRepository;
     private final Map<String, PurchaseDto> purchaseResult;
@@ -25,7 +27,7 @@ public class PurchaseService {
         for (Map.Entry<String, Integer> entry : inputs.entrySet()) {
             boolean availablePurchase = productRepository.availablePurchase(entry.getKey(), entry.getValue());
             if (!availablePurchase) {
-                throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+                throw new IllegalArgumentException(QUANTITY_OVERFLOW.getMessage());
             }
         }
     }
@@ -33,16 +35,17 @@ public class PurchaseService {
     public Map<String, PurchaseDto> processPurchase(Map<String, Integer> purchaseList) {
         for (Map.Entry<String, Integer> entry : purchaseList.entrySet()) {
             Product product = productRepository.findByName(entry.getKey());
-            processPromotion(product, entry.getValue());
+            updateInventory(product, entry.getValue());
         }
         return purchaseResult;
 
     }
 
-    public void processPromotion(Product product, int hopeQuantity) {
+    public void updateInventory(Product product, int hopeQuantity) {
         PurchaseDto purchaseDto = createPurchaseDto(product, hopeQuantity);
         purchaseResult.put(product.getName(), purchaseDto);
-        productRepository.purchase(product, product.isPromotion(), purchaseDto);
+        int hopeAmount = purchaseDto.getTotalNum();
+        product.reduceQuantity(hopeAmount);
     }
 
     private PurchaseDto createPurchaseDto(Product product, int hopeQuantity) {
