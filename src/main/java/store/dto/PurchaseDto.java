@@ -36,9 +36,4 @@ public class PurchaseDto {
     public long promotionSalePrice(){
         return onePrice * setNum;
     }
-
-    public void update(PurchaseDto purchaseDto) {
-        this.totalPurchaseQuantity += purchaseDto.getTotalNum();
-        this.setNum += purchaseDto.getSetNum();
-    }
 }

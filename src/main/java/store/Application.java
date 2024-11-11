@@ -21,7 +21,7 @@ public class Application {
 
     public static void main(String[] args) {
         PromotionRepository promotionRepository = getPromotionRepository();
-        Map<String, ProductDto> productDtos = getProductDtos(promotionRepository);
+        Map<String, ProductDto> productDtos = getProductDtos();
         ProductRepository productRepository = getProductRepository(promotionRepository, productDtos);
         PurchaseService purchaseService = new PurchaseService(productRepository);
 
@@ -47,7 +47,7 @@ public class Application {
                 .initializePromotions(Paths.get(PROMOTION_FILE.path()));
     }
 
-    private static Map<String, ProductDto> getProductDtos(PromotionRepository promotionRepository) {
+    private static Map<String, ProductDto> getProductDtos() {
         return new ContextProductLoader()
                 .initializeProducts(Paths.get(PRODUCTS_FILE.path()));
     }

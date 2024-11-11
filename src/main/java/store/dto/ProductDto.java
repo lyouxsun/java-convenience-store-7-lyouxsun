@@ -3,6 +3,9 @@ package store.dto;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
 
+import static store.enums.ErrorMessages.PRODUCT_NAME;
+import static store.enums.ErrorMessages.PRODUCT_QUANTITY;
+
 public class ProductDto {
     private final String name;
     private final long price;
@@ -31,7 +34,7 @@ public class ProductDto {
     private static String validateName(String rawName) {
         String name = rawName.trim();
         if (name.isBlank()) {
-            throw new DataValidationException("[ERROR] 상품 이름이 잘못 등록되어 있습니다.");
+            throw new DataValidationException(PRODUCT_NAME.getMessage());
         }
         return name;
     }
@@ -50,7 +53,7 @@ public class ProductDto {
 
     private static void validateNumber(String rawInput) {
         if (!rawInput.matches("\\d+")) {
-            throw new DataValidationException("[ERROR] 상품 가격과 수량은 0 이상의 정수여야 합니다.");
+            throw new DataValidationException(PRODUCT_QUANTITY.getMessage());
         }
     }
 
@@ -76,11 +79,10 @@ public class ProductDto {
 
     public void setInfo(String[] info) {
         int quantity = validateQuantity(info[2]);
-        if (info[3].equals("null")) {       // 일반재고 재등록
+        if (info[3].equals("null")) {
             this.originalQuantity = quantity;
             return;
         }
-        // 할인재고 재등록
         this.promotion = info[3];
         this.promotionQuantity = quantity;
     }

@@ -38,7 +38,7 @@ public class Promotion {
     private static String validateName(String rawName) {
         String name = rawName.trim();
         if (name.isBlank()) {
-            throw new DataValidationException(PROMOTION_NOT_FOUND.getMessage());
+            throw new DataValidationException(PROMOTION_NAME.getMessage());
         }
         return name;
     }

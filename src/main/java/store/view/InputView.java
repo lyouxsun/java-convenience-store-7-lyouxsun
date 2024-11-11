@@ -30,6 +30,7 @@ public class InputView {
             }
         }
     }
+
     private static boolean validateYesNoInput(String input) {
         if (input.equalsIgnoreCase("Y")) {
             return true;

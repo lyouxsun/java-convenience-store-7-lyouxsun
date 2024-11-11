@@ -12,7 +12,7 @@ import static store.enums.ErrorMessages.QUANTITY_OVERFLOW;
 
 public class PurchaseService {
     private final ProductRepository productRepository;
-    private final Map<String, PurchaseDto> purchaseResult;
+    private Map<String, PurchaseDto> purchaseResult;
 
     public PurchaseService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -33,6 +33,7 @@ public class PurchaseService {
     }
 
     public Map<String, PurchaseDto> processPurchase(Map<String, Integer> purchaseList) {
+        this.purchaseResult = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : purchaseList.entrySet()) {
             Product product = productRepository.findByName(entry.getKey());
             updateInventory(product, entry.getValue());
