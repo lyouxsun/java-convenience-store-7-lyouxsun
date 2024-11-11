@@ -5,7 +5,6 @@ import store.context.ContextPromotionLoader;
 import store.controller.InputController;
 import store.controller.StoreController;
 import store.dto.ProductDto;
-import store.dto.PurchaseDto;
 import store.repository.ProductRepository;
 import store.repository.PromotionRepository;
 import store.service.PurchaseService;
@@ -23,19 +22,25 @@ public class Application {
     public static void main(String[] args) {
         PromotionRepository promotionRepository = getPromotionRepository();
         Map<String, ProductDto> productDtos = getProductDtos(promotionRepository);
-        Map<String, PurchaseDto> results = new LinkedHashMap<>();
         ProductRepository productRepository = getProductRepository(promotionRepository, productDtos);
-
         PurchaseService purchaseService = new PurchaseService(productRepository);
+
         StoreController storeController = new StoreController(purchaseService);
         InputController inputController = new InputController(purchaseService);
-        while (true){
-            Map<String, Integer> hopePurchase = inputController.getPurchaseInput();
-            if (!storeController.run(results, hopePurchase)){
+
+        runStore(inputController, storeController);
+    }
+
+    private static void runStore(InputController inputController, StoreController storeController) {
+        while (true) {
+            Map<String, Integer> hopePurchase = new LinkedHashMap<>();
+            inputController.getPurchaseInput(hopePurchase);
+            if (!storeController.run(hopePurchase)) {
                 break;
             }
         }
     }
+
 
     private static PromotionRepository getPromotionRepository() {
         return new ContextPromotionLoader()

@@ -20,10 +20,9 @@ public class InputController {
         this.purchaseService = purchaseService;
     }
 
-    public Map<String, Integer> getPurchaseInput() {
-        Map<String, Integer> input = new LinkedHashMap<>();
+    public void getPurchaseInput(Map<String, Integer> input) {
         showInventory();
-        return readInput(input);
+        readInput(input);
     }
 
     public void showInventory() {
@@ -31,14 +30,14 @@ public class InputController {
         inputView.showInventory(inventoryDto);
     }
 
-    private Map<String, Integer> readInput(Map<String, Integer> input) {
+    private void readInput(Map<String, Integer> input) {
         while (true) {
             try {
                 String buy = inputView.requestPurchase();
                 Map<String, Integer> currentInputs = validateBuy(buy);
                 purchaseService.validateInputs(currentInputs);
                 putNewItem(input, currentInputs);
-                return input;
+                return;
             } catch (IllegalArgumentException e) {
                 showException(e);
             }
