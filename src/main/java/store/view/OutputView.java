@@ -5,36 +5,52 @@ import store.dto.ResultDto;
 
 import java.util.Map;
 
+import static store.enums.ReceiptMessages.*;
+
 public class OutputView {
     public static void showReceipt(Map<String, PurchaseDto> purchaseResult, ResultDto resultDto) {
-        System.out.println("==============W 편의점================");
-        System.out.println("상품명\t\t\t\t수량\t\t  금액");
+        showHeader();
+        int totalPurchaseNum = showProducts(purchaseResult);
+        showPromotions(purchaseResult);
+        showResult(totalPurchaseNum, resultDto);
+    }
 
+    private static void showHeader() {
+        System.out.println(STORE_INFO.getMessage());
+        System.out.println(ITEM_LIST_HEADER.getMessage());
+    }
+
+    private static int showProducts(Map<String, PurchaseDto> purchaseResult) {
         int totalPurchaseNum = 0;
-        long totalPurchaseAmount = 0;
-
         for (Map.Entry<String, PurchaseDto> entry : purchaseResult.entrySet()) {
             String productName = entry.getKey();
             int totalNum = entry.getValue().getTotalNum();
             totalPurchaseNum += totalNum;
             String amount = String.format("%,d", entry.getValue().getTotalPrice());
-            System.out.println(productName + "\t\t\t\t" + totalNum + "\t\t  " + amount);
+            System.out.println(ITEM_LIST_FORMAT.format(productName, totalNum , amount));
         }
-        System.out.println("=============증\t\t정===============");
+        return totalPurchaseNum;
+    }
+
+    private static void showPromotions(Map<String, PurchaseDto> purchaseResult) {
+        System.out.println(PROMOTION_LIST_HEADER.getMessage());
         for (Map.Entry<String, PurchaseDto> entry : purchaseResult.entrySet()) {
             PurchaseDto purchaseDto = entry.getValue();
             if (purchaseDto.getSetNum() > 0) {
                 String productName = entry.getKey();
                 int setNum = entry.getValue().getSetNum();
-                System.out.println(productName + "\t\t\t\t" + setNum);
+                System.out.println(PROMOTION_LIST_FORMAT.format(productName, setNum));
             }
         }
-        System.out.println("====================================");
+    }
 
+    private static void showResult(int totalPurchaseNum, ResultDto resultDto) {
+        System.out.println(LINE.getMessage());
+        System.out.println();
+        System.out.println(TOTAL_AMOUNT_INFO.format(totalPurchaseNum, resultDto.getTotalAmount()));
+        System.out.println(PROMOTION_AMOUNT_INFO.format(resultDto.getPromotionAmount()));
+        System.out.println(MEMBERSHIP_AMOUNT_INFO.format(resultDto.getMembershipAmount()));
+        System.out.println(TOTAL_PAYMENT_AMOUNT_INFO.format(resultDto.getTotalPaymentAmount()));
 
-        System.out.println("총구매액\t\t\t\t" + totalPurchaseNum + "\t\t  " + resultDto.getTotalAmount());
-        System.out.println("행사할인\t\t\t\t\t\t  -" + resultDto.getPromotionAmount());
-        System.out.println("멤버십할인\t\t\t\t\t\t  -" + resultDto.getMembershipAmount());
-        System.out.println("내실돈\t\t\t\t\t\t  " + resultDto.getTotalPaymentAmount());
     }
 }
