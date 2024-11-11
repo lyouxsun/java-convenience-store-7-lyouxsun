@@ -113,16 +113,23 @@ public class Product {
         return (purchaseAmount + 1) <= promotionQuantity && ((purchaseAmount + 1) % promotionSet == 0);
     }
 
-    public void reduceQuantity(int promotionAmount) {
-        if (promotionQuantity >= promotionAmount) {
-            promotionQuantity -= promotionAmount;
+    public void reduceQuantity(int hope) {
+        if (promotionQuantity < hope) {
+            hope -= promotionQuantity;
+            promotionQuantity = 0;
+            originalQuantity -= hope;
             return;
         }
-        throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
+        originalQuantity -= hope;
+//        throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
     }
 
     public int getQuantity() {
         return originalQuantity + promotionQuantity;
+    }
+
+    public int getPromotionQuantity() {
+        return promotionQuantity;
     }
 
     public long getPrice() {

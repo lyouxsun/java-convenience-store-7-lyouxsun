@@ -2,9 +2,9 @@ package store.repository;
 
 import store.domain.Product;
 import store.dto.InventoryDto;
+import store.dto.PurchaseDto;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ProductRepository {
     private final Map<String, Product> products;
@@ -47,33 +47,12 @@ public class ProductRepository {
         return products.size();
     }
 
-//    public void purchase(String productName, boolean isPromotion, PurchaseDto purchaseDto) {
-//        Product product = findByName(productName);
-//        int hopeAmount = purchaseDto.getTotalNum();
-//        if (product.getQuantity() < hopeAmount) {
-//            hopeAmount -= product.getQuantity();
-//            product.reduceQuantity(product.getOriginalQuantity());
-//            Product noPromotion = findByName(productName);
-//            noPromotion.reduceQuantity(hopeAmount);
-//        }
-//
-//    }
-//
-//    public long findAmountByName(String name) {
-//        Optional<Product> optionalProduct = products.stream()
-//                .filter(product -> product.isSameName(name))
-//                .findFirst();
-//        Product product = optionalProduct.get();
-//        return product.getOriginalQuantity();
-//    }
-
-    public Set<String> findAllName() {
-        return products.values().stream()
-                .map(Product::getName)
-                .collect(Collectors.toSet());
+    public void purchase(Product product, boolean isPromotion, PurchaseDto purchaseDto) {
+        int hopeAmount = purchaseDto.getTotalNum();
+        product.reduceQuantity(hopeAmount);
     }
 
     public Product findByName(String name) {
-        return products.get("name");
+        return products.get(name);
     }
 }

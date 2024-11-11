@@ -13,7 +13,6 @@ public class PurchaseDto {
         this.totalPurchaseQuantity = totalPurchaseQuantity;
         this.setNum = setNum;
         this.oneSetQuantity = oneSetQuantity;
-
     }
 
     public int getTotalNum() {
