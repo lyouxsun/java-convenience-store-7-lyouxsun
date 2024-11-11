@@ -2,7 +2,6 @@ package store.controller;
 
 import store.dto.PurchaseDto;
 import store.dto.ResultDto;
-import store.repository.ProductRepository;
 import store.service.MembershipService;
 import store.service.PurchaseService;
 import store.view.InputView;
@@ -19,8 +18,8 @@ public class StoreController {
     private final OutputView outputView;
 
 
-    public StoreController(ProductRepository productRepository) {
-        this.purchaseService = new PurchaseService(productRepository);
+    public StoreController(PurchaseService purchaseService) {
+        this.purchaseService = purchaseService;
         this.membershipService = new MembershipService();
         outputView = new OutputView();
     }

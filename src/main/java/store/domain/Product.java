@@ -1,9 +1,7 @@
 package store.domain;
 
-import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
 import store.dto.ProductDto;
 import store.dto.PurchaseDto;
-import store.repository.PromotionRepository;
 import store.view.InputView;
 
 import static store.enums.Messages.NO_PROMOTION;
@@ -13,25 +11,29 @@ public class Product {
 
     private final String name;
     private final long price;
-    private int quantity;
     private final Promotion promotion;
+    private int originalQuantity = 0;
+    private int promotionQuantity = 0;
 
-    private Product(String name, long price, int quantity, Promotion promotion) {
+
+    private Product(String name, long price, int originalQuantity, int promotionQuantity, Promotion promotion) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
+        this.originalQuantity = originalQuantity;
+        this.promotionQuantity = promotionQuantity;
         this.promotion = promotion;
     }
 
     public static Product from(ProductDto productDto, Promotion promotion) {
         String name = productDto.getName();
         long price = productDto.getPrice();
-        int quantity = productDto.getQuantity();
-        return new Product(name, price, quantity, promotion);
+        int originalQuantity = productDto.getOriginalQuantity();
+        int promotionQuantity = productDto.getPromotionQuantity();
+        return new Product(name, price, originalQuantity, promotionQuantity, promotion);
     }
 
     public boolean isPurchaseAvailable(long purchaseAmount) {
-        return quantity >= purchaseAmount;
+        return originalQuantity + promotionQuantity >= purchaseAmount;
     }
 
     public boolean isSameName(String name) {
@@ -42,17 +44,30 @@ public class Product {
         return name;
     }
 
+    public String quantityToString(int quantity) {
+        if (quantity == 0) {
+            return "재고 없음";
+        }
+        return String.format("%d개", quantity);
+    }
+
     @Override
     public String toString() {
+        StringBuilder sb = new StringBuilder();
         if (promotion != null) {
-            return "- " + name + " "
-                    + price + "원 "
-                    + quantity + "개 "
-                    + promotion.getName() + "\n";
+            String promotionProduct = String.format("- %s %,d원 %s %s\n",
+                    name,
+                    price,
+                    quantityToString(originalQuantity),
+                    promotion.getName());
+            sb.append(promotionProduct);
         }
-        return "- " + name + " "
-                + price + "원 "
-                + quantity + "개\n";
+        String noPromotionProduct = String.format("- %s %,d원 %s\n",
+                name,
+                price,
+                quantityToString(promotionQuantity));
+        sb.append(noPromotionProduct);
+        return sb.toString();
     }
 
     public boolean isPromotion() {
@@ -69,8 +84,8 @@ public class Product {
 
         // 프로모션이 적용되는 세트 수
         int setNum = purchaseAmount / setQuantity;
-        if (quantity < purchaseAmount) {
-            setNum = quantity / setQuantity;
+        if (promotionQuantity < purchaseAmount) {
+            setNum = promotionQuantity / setQuantity;
         }
 
         // 프로모션 적용이 안되는 물건 개수
@@ -81,7 +96,7 @@ public class Product {
             boolean yes = InputView.requestYorN(PROMOTION_MORE.format(name));
             if (yes) {
                 setNum++;
-                return new PurchaseDto(price, purchaseAmount+1, setNum + 1, setQuantity);
+                return new PurchaseDto(price, purchaseAmount + 1, setNum + 1, setQuantity);
             }
         }
 
@@ -95,22 +110,22 @@ public class Product {
     }
 
     private boolean morePromotion(int purchaseAmount, int promotionSet) {
-        return (purchaseAmount + 1) <= quantity && ((purchaseAmount + 1) % promotionSet == 0);
+        return (purchaseAmount + 1) <= promotionQuantity && ((purchaseAmount + 1) % promotionSet == 0);
     }
 
     public void reduceQuantity(int promotionAmount) {
-        if (quantity >= promotionAmount) {
-            quantity -= promotionAmount;
+        if (promotionQuantity >= promotionAmount) {
+            promotionQuantity -= promotionAmount;
             return;
         }
         throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getOriginalQuantity() {
+        return promotionQuantity;
     }
 
-    public long getPrice(){
+    public long getPrice() {
         return price;
     }
 }

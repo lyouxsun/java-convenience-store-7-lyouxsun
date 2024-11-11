@@ -1,19 +1,30 @@
 package store.context;
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
-import store.repository.ProductRepository;
+import store.dto.ProductDto;
+import store.repository.PromotionRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ContextProductLoaderTest {
+
+    private PromotionRepository promotionRepository;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        Path promotionTest = Paths.get("src/test/resources/promotions/promotionsSuccess.md");
+        this.promotionRepository = new ContextPromotionLoader().initializePromotions(promotionTest);
+    }
 
     @DisplayName("상품 목록이 정상적으로 입력된 경우")
     @Test
@@ -22,8 +33,8 @@ public class ContextProductLoaderTest {
         Path productsTest = Paths.get("src/test/resources/products/productsSuccess.md");
 
         // when
-        ProductRepository promotionRepository = new ContextProductLoader().initializeProducts(productsTest);
-        int productsCount = promotionRepository.getSize();
+        Map<String, ProductDto> productDtos = new ContextProductLoader().initializeProducts(productsTest);
+        int productsCount = productDtos.size();
 
         // then
         long lineCount = Files.lines(productsTest).count();

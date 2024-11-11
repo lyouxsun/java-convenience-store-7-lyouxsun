@@ -1,5 +1,6 @@
 package store;
 
+import store.context.ConfigProduct;
 import store.context.ContextProductLoader;
 import store.context.ContextPromotionLoader;
 import store.controller.InputController;
@@ -15,31 +16,31 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
+import static store.context.ConfigProduct.*;
 import static store.enums.FilePath.PRODUCTS_FILE;
 import static store.enums.FilePath.PROMOTION_FILE;
 
 public class Application {
     public static void main(String[] args) {
-        PromotionRepository promotionRepository = new ContextPromotionLoader()
-                .initializePromotions(Paths.get(PROMOTION_FILE.path()));
-        List<ProductDto> productDtos = new ContextProductLoader()
-                .initializeProducts(Paths.get(PRODUCTS_FILE.path()), promotionRepository);
+        PromotionRepository promotionRepository = getPromotionRepository();
+        Map<String, ProductDto> productDtos = getProductDtos(promotionRepository);
         ProductRepository productRepository = getProductRepository(promotionRepository, productDtos);
 
         PurchaseService purchaseService = new PurchaseService(productRepository);
-        StoreController storeController = new StoreController(productRepository);
+        StoreController storeController = new StoreController(purchaseService);
         InputController inputController = new InputController(purchaseService);
         Map<String, Integer> purchaseInput = inputController.getPurchaseInput();
         storeController.run(purchaseInput);
     }
 
-    private static ProductRepository getProductRepository(PromotionRepository promotionRepository, List<ProductDto> productDtos) {
-        ProductRepository productRepository = new ProductRepository();
-        for (ProductDto productDto : productDtos) {
-            Promotion promotion = promotionRepository.findByName(productDto.getPromotion());
-            Product product = Product.from(productDto, promotion);
-            productRepository.addProduct(product);
-        }
-        return productRepository;
+    private static PromotionRepository getPromotionRepository() {
+        return new ContextPromotionLoader()
+                .initializePromotions(Paths.get(PROMOTION_FILE.path()));
     }
+
+    private static Map<String, ProductDto> getProductDtos(PromotionRepository promotionRepository) {
+        return new ContextProductLoader()
+                .initializeProducts(Paths.get(PRODUCTS_FILE.path()));
+    }
+
 }

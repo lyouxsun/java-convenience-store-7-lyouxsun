@@ -7,6 +7,7 @@ import store.dto.PurchaseDto;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProductRepository {
     private final Set<Product> products;
@@ -35,7 +36,7 @@ public class ProductRepository {
         }
         return products.stream()
                 .filter(product -> product.isSameName(name))
-                .mapToLong(Product::getQuantity)
+                .mapToLong(Product::getOriginalQuantity)
                 .sum();
     }
 
@@ -54,9 +55,9 @@ public class ProductRepository {
     public void purchase(String productName, boolean isPromotion, PurchaseDto purchaseDto) {
         Product product = findByNameAndPromotion(productName, isPromotion);
         int hopeAmount = purchaseDto.getTotalNum();
-        if (product.getQuantity() < hopeAmount) {
-            hopeAmount -= product.getQuantity();
-            product.reduceQuantity(product.getQuantity());
+        if (product.getOriginalQuantity() < hopeAmount) {
+            hopeAmount -= product.getOriginalQuantity();
+            product.reduceQuantity(product.getOriginalQuantity());
             Product noPromotion = findByNameAndPromotion(productName, !isPromotion);
             noPromotion.reduceQuantity(hopeAmount);
         }
@@ -68,6 +69,10 @@ public class ProductRepository {
                 .filter(product -> product.isSameName(name))
                 .findFirst();
         Product product = optionalProduct.get();
-        return product.getQuantity();
+        return product.getOriginalQuantity();
+    }
+
+    public Set<String> findAllName() {
+        return products.stream().map(Product::getName).collect(Collectors.toSet());
     }
 }

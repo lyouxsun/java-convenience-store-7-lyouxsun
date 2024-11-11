@@ -71,7 +71,7 @@ public class Promotion {
         return "Promotion: {" +
                 "name='" + name + '\'' +
                 ", buyQuantity=" + buyQuantity +
-                ", getQuantity=" + getQuantity +
+                ", getOriginalQuantity=" + getQuantity +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';
