@@ -12,11 +12,11 @@ import static store.enums.ErrorMessages.*;
 
 public class Promotion {
 
-    private String name;
-    private int buyQuantity;
-    private int getQuantity;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private final String name;
+    private final int buyQuantity;
+    private final int getQuantity;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
 
     private Promotion(String name, int buyQuantity, int getQuantity, LocalDateTime startDate, LocalDateTime endDate) {
         this.name = name;
@@ -48,8 +48,7 @@ public class Promotion {
         if (!rawQuantity.matches("\\d+")) {
             throw new DataValidationException(PROMOTION_QUANTITY.getMessage());
         }
-        int quantity = Integer.parseInt(rawQuantity);
-        return quantity;
+        return Integer.parseInt(rawQuantity);
     }
 
     private static LocalDateTime validateDate(String rawDate) {

@@ -17,15 +17,15 @@ public enum Messages {
         this.message = message;
     }
 
-    public String format(String name){
+    public String format(String name) {
         return String.format(message, name);
     }
 
-    public String format(String name, int quantity){
+    public String format(String name, int quantity) {
         return String.format(message, name, quantity);
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
 }

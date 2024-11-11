@@ -18,7 +18,6 @@ public class StoreController {
     private final MembershipService membershipService;
     private final OutputView outputView;
 
-
     public StoreController(PurchaseService purchaseService) {
         this.purchaseService = purchaseService;
         this.membershipService = new MembershipService();

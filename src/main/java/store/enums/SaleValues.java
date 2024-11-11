@@ -1,6 +1,7 @@
 package store.enums;
 
 public enum SaleValues {
+
     MEMBERSHIP_DISCOUNT_RATE(0.3),
     MEMBERSHIP_DISCOUNT_LIMIT(8_000);
 
