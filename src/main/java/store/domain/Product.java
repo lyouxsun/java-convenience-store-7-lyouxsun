@@ -4,8 +4,7 @@ import store.dto.ProductDto;
 import store.dto.PurchaseDto;
 import store.view.InputView;
 
-import static store.enums.Messages.NO_PROMOTION;
-import static store.enums.Messages.PROMOTION_MORE;
+import static store.enums.Messages.*;
 
 public class Product {
 
@@ -55,19 +54,27 @@ public class Product {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (promotion != null) {
-            String promotionProduct = String.format("- %s %,d원 %s %s\n",
-                    name,
-                    price,
-                    quantityToString(promotionQuantity),
-                    promotion.getName());
+            String promotionProduct = getPromotionProduct();
             sb.append(promotionProduct);
         }
-        String noPromotionProduct = String.format("- %s %,d원 %s\n",
+        String noPromotionProduct = getNoPromotionProduct();
+        sb.append(noPromotionProduct);
+        return sb.toString();
+    }
+
+    private String getPromotionProduct() {
+        return String.format(INVENTORY_WITH_PROMOTION.getMessage(),
+                name,
+                price,
+                quantityToString(promotionQuantity),
+                promotion.getName());
+    }
+
+    private String getNoPromotionProduct() {
+        return String.format(INVENTORY_WITHOUT_PROMOTION.getMessage(),
                 name,
                 price,
                 quantityToString(originalQuantity));
-        sb.append(noPromotionProduct);
-        return sb.toString();
     }
 
     public boolean isPromotion() {
@@ -78,35 +85,37 @@ public class Product {
     }
 
     public PurchaseDto getPromotionAmount(final int purchaseAmount) {
+        int oneSet = promotion.getPromotionQuantity();
+        int setNum = calculateSetNum(purchaseAmount, oneSet);
+        int noPromotionNum = purchaseAmount - oneSet * setNum;
+        if (shouldAddMorePromotion(purchaseAmount, oneSet)) {
+            return handleAdditionalPromotion(purchaseAmount, setNum, oneSet, price);
+        }
+        if (shouldProceedWithoutPromotion(noPromotionNum)) {
+            return new PurchaseDto(price, purchaseAmount, setNum, oneSet);
+        }
+        return new PurchaseDto(price, purchaseAmount, setNum, oneSet);
+    }
 
-        // 2+1이면 3, 1+1이면 2를 리턴
-        int setQuantity = promotion.getPromotionQuantity();
+    private static PurchaseDto handleAdditionalPromotion(int purchaseAmount, int setNum, int oneSet, long price) {
+        setNum++;
+        return new PurchaseDto(price, purchaseAmount + 1, setNum + 1, oneSet);
+    }
 
-        // 프로모션이 적용되는 세트 수
-        int setNum = purchaseAmount / setQuantity;
+    private boolean shouldProceedWithoutPromotion(int noPromotionNum) {
+        return noPromotionNum > 1 && InputView.requestYorN(NO_PROMOTION.format(name, noPromotionNum));
+    }
+
+    private int calculateSetNum(int purchaseAmount, int oneSet) {
+        int setNum = purchaseAmount / oneSet;
         if (promotionQuantity < purchaseAmount) {
-            setNum = promotionQuantity / setQuantity;
+            setNum = promotionQuantity / oneSet;
         }
+        return setNum;
+    }
 
-        // 프로모션 적용이 안되는 물건 개수
-        int noPromotionNum = purchaseAmount - setQuantity * setNum;
-
-
-        if (morePromotion(purchaseAmount, setQuantity)) {
-            boolean yes = InputView.requestYorN(PROMOTION_MORE.format(name));
-            if (yes) {
-                setNum++;
-                return new PurchaseDto(price, purchaseAmount + 1, setNum + 1, setQuantity);
-            }
-        }
-
-        if (noPromotionNum > 1) {
-            boolean noPromotion = InputView.requestYorN(NO_PROMOTION.format(name, noPromotionNum));
-            if (noPromotion) {
-                return new PurchaseDto(price, purchaseAmount, setNum, setQuantity);
-            }
-        }
-        return new PurchaseDto(price, purchaseAmount, setNum, setQuantity);
+    private boolean shouldAddMorePromotion(int purchaseAmount, int oneSet) {
+        return morePromotion(purchaseAmount, oneSet) && InputView.requestYorN(PROMOTION_MORE.format(name));
     }
 
     private boolean morePromotion(int purchaseAmount, int promotionSet) {
@@ -121,15 +130,6 @@ public class Product {
             return;
         }
         originalQuantity -= hope;
-//        throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
-    }
-
-    public int getQuantity() {
-        return originalQuantity + promotionQuantity;
-    }
-
-    public int getPromotionQuantity() {
-        return promotionQuantity;
     }
 
     public long getPrice() {

@@ -33,20 +33,6 @@ public class ProductRepository {
         return product.isPurchaseAvailable(hopeQuantity);
     }
 
-
-    // 없애야됨
-    public Product findByNameAndPromotion(String name, boolean isPromotion) {
-        return products.values().stream()
-                .filter(product -> product.isSameName(name))
-                .filter(product -> product.isPromotion() == isPromotion)
-                .findAny()
-                .orElse(null);
-    }
-
-    public int getSize() {
-        return products.size();
-    }
-
     public void purchase(Product product, boolean isPromotion, PurchaseDto purchaseDto) {
         int hopeAmount = purchaseDto.getTotalNum();
         product.reduceQuantity(hopeAmount);

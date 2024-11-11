@@ -30,7 +30,6 @@ public class MembershipService {
                 .sum();
     }
 
-
     private long getMembershipAmount(Map<String, PurchaseDto> purchaseResult, long totalAmount) {
         long membershipTarget = totalAmount;
         long promotionAmount = purchaseResult.values().stream()
@@ -40,7 +39,7 @@ public class MembershipService {
         membershipTarget -= promotionAmount;
 
         membershipTarget *= 0.3;
-        if (membershipTarget < 8_000L){
+        if (membershipTarget < 8_000L) {
             return membershipTarget;
         }
         return 8_000;

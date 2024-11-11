@@ -11,13 +11,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static store.enums.ErrorMessages.PRODUCT_FILE_ERROR;
+
 public class ContextProductLoader {
 
     public Map<String, ProductDto> initializeProducts(Path productsList) {
         try {
             return loadProductContext(productsList);
         } catch (IOException e) {
-            throw new IllegalArgumentException("[ERROR] 상품 목록을 입력받을 수 없습니다.");
+            throw new IllegalArgumentException(PRODUCT_FILE_ERROR.getMessage());
         } catch (DataValidationException e) {
             ExceptionUtils.showException(e);
             throw e;

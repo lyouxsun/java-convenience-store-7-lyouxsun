@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import static store.enums.ErrorMessages.*;
+
 public class Promotion {
 
     private String name;
@@ -36,7 +38,7 @@ public class Promotion {
     private static String validateName(String rawName) {
         String name = rawName.trim();
         if (name.isBlank()) {
-            throw new DataValidationException("[ERROR] 프로모션 이름이 잘못 등록되어 있습니다.");
+            throw new DataValidationException(PROMOTION_NOT_FOUND.getMessage());
         }
         return name;
     }
@@ -44,7 +46,7 @@ public class Promotion {
     private static int validateQuantity(String quantityInput) {
         String rawQuantity = quantityInput.trim();
         if (!rawQuantity.matches("\\d+")) {
-            throw new DataValidationException("[ERROR] 프로모션 상품 수량은 0 이상의 정수여야 합니다.");
+            throw new DataValidationException(PROMOTION_QUANTITY.getMessage());
         }
         int quantity = Integer.parseInt(rawQuantity);
         return quantity;
@@ -54,9 +56,8 @@ public class Promotion {
         try {
             LocalDate date = LocalDate.parse(rawDate, DateTimeFormatter.ISO_LOCAL_DATE);
             return date.atStartOfDay();
-//            return LocalDateTime.parse(rawDate, DateTimeFormatter.ISO_LOCAL_DATE);
         } catch (DateTimeParseException e) {
-            throw new DataValidationException("[ERROR] 프로모션 날짜가 잘못된 형식으로 등록되어 있습니다.");
+            throw new DataValidationException(PROMOTION_DATE_FORMAT.getMessage());
         }
     }
 
@@ -67,17 +68,6 @@ public class Promotion {
     public boolean isBetweenDates(){
         LocalDateTime now = DateTimes.now();
         return now.isAfter(startDate) && now.isBefore(endDate);
-    }
-
-    @Override
-    public String toString() {
-        return "Promotion: {" +
-                "name='" + name + '\'' +
-                ", buyQuantity=" + buyQuantity +
-                ", getOriginalQuantity=" + getQuantity +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
     }
 
     public int getPromotionQuantity(){

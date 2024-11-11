@@ -6,6 +6,7 @@ public enum FilePath {
     PROMOTION_FILE("src/main/resources/promotions.md");
 
     private final String path;
+
     FilePath(String path) {
         this.path = path;
     }

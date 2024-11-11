@@ -84,9 +84,4 @@ public class ProductDto {
         this.promotion = info[3];
         this.promotionQuantity = quantity;
     }
-
-    @Override
-    public String toString() {
-        return "[name=" + name + ", price=" + price + ", promotion=" + promotion + ", promotionQ=" + promotionQuantity + ", originalQ=" + originalQuantity + "]";
-    }
 }

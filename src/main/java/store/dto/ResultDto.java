@@ -5,9 +5,11 @@ public record ResultDto(long totalAmount, long promotionAmount, long membershipA
     public long getTotalAmount() {
         return totalAmount;
     }
+
     public long getPromotionAmount() {
         return promotionAmount;
     }
+
     public long getMembershipAmount() {
         return membershipAmount;
     }

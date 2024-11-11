@@ -15,6 +15,7 @@ public enum ReceiptMessages {
 
 
     private final String message;
+
     ReceiptMessages(String message) {
         this.message = message;
     }
@@ -39,7 +40,7 @@ public enum ReceiptMessages {
         return String.format(message, amount);
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
 }

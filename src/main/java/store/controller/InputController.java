@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static store.enums.ErrorMessages.INVALID_FORMAT;
+import static store.enums.ErrorMessages.NON_INTEGER_QUANTITY;
 import static store.utils.ExceptionUtils.showException;
 
 public class InputController {
@@ -60,12 +62,12 @@ public class InputController {
         if (rawAmount.matches("\\d+")) {
             return Integer.parseInt(rawAmount);
         }
-        throw new IllegalArgumentException("[ERROR] 구매 수량은 정수여야 합니다. 다시 입력해 주세요.");
+        throw new IllegalArgumentException(NON_INTEGER_QUANTITY.getMessage());
     }
 
     private String[] validateProductInput(String item) {
         if (item.charAt(0) != '[' || item.charAt(item.length() - 1) != ']' || !item.contains("-")) {
-            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
+            throw new IllegalArgumentException(INVALID_FORMAT.getMessage());
         }
         String validatedInput = item.substring(1, item.length() - 1);
         return validatedInput.split("-");
