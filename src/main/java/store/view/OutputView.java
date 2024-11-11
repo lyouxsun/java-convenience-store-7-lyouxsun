@@ -46,8 +46,8 @@ public class OutputView {
     private void showResult(int totalPurchaseNum, ResultDto resultDto) {
         System.out.println(LINE.getMessage());
         System.out.println(TOTAL_AMOUNT_INFO.format(totalPurchaseNum, resultDto.getTotalAmount()));
-        System.out.println(PROMOTION_AMOUNT_INFO.format(resultDto.getPromotionAmount()));
-        System.out.println(MEMBERSHIP_AMOUNT_INFO.format(resultDto.getMembershipAmount()));
+        System.out.println(PROMOTION_AMOUNT_INFO.format(-1 * resultDto.getPromotionAmount()));
+        System.out.println(MEMBERSHIP_AMOUNT_INFO.format(-1 * resultDto.getMembershipAmount()));
         System.out.println(TOTAL_PAYMENT_AMOUNT_INFO.format(resultDto.getTotalPaymentAmount()));
     }
 

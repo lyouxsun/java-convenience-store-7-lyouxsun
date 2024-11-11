@@ -25,12 +25,31 @@ public class StoreController {
         outputView = new OutputView();
     }
 
-    public boolean run(Map<String, Integer> purchase) {
+    public boolean run(Map<String, PurchaseDto> results, Map<String, Integer> purchase) {
         Map<String, PurchaseDto> purchaseResult = purchaseService.processPurchase(purchase);
         boolean isMembershipSale = InputView.requestYorN(MEMBERSHIP_SALE.getMessage());
-        ResultDto resultDto = membershipService.calculateAmount(purchaseResult, isMembershipSale);
-        outputView.showReceipt(purchaseResult, resultDto);
+        updateResults(results, purchaseResult);
+        ResultDto resultDto = membershipService.calculateAmount(results, isMembershipSale);
+        outputView.showReceipt(results, resultDto);
         return InputView.requestYorN(PURCHASE_MORE.getMessage());
+    }
+
+    private void updateResults(Map<String, PurchaseDto> results, Map<String, PurchaseDto> purchaseResult) {
+        for (Map.Entry<String, PurchaseDto> stringPurchaseDtoEntry : purchaseResult.entrySet()) {
+            String productName = stringPurchaseDtoEntry.getKey();
+            PurchaseDto newPurchaseDto = stringPurchaseDtoEntry.getValue();
+            if (results.containsKey(productName)) {
+                update(results, productName, newPurchaseDto);
+                continue;
+            }
+            results.put(productName, newPurchaseDto);
+        }
+    }
+
+    private static void update(Map<String, PurchaseDto> results, String productName, PurchaseDto newPurchaseDto) {
+        PurchaseDto purchaseDto = results.get(productName);
+        purchaseDto.update(newPurchaseDto);
+        results.put(productName, purchaseDto);
     }
 
 }

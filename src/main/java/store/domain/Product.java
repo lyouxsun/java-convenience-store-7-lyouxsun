@@ -117,8 +117,8 @@ public class Product {
         if(noPromotionNum < 1){
             return false;
         }
-        boolean condition2 = InputView.requestYorN(NO_PROMOTION.format(name, noPromotionNum));
-        return !condition2;
+        boolean condition = InputView.requestYorN(NO_PROMOTION.format(name, noPromotionNum));
+        return !condition;
     }
 
     private boolean morePromotion(int purchaseAmount, int promotionSet) {

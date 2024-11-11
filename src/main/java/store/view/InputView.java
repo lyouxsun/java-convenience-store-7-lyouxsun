@@ -9,7 +9,7 @@ import static store.enums.Messages.GREETING;
 import static store.enums.Messages.REQUEST_PURCHASE;
 
 public class InputView {
-    public static void showInventory(InventoryDto inventoryDto) {
+    public void showInventory(InventoryDto inventoryDto) {
         System.out.println(GREETING.getMessage());
         System.out.println(inventoryDto.toString());
     }

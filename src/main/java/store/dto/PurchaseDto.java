@@ -3,8 +3,8 @@ package store.dto;
 public class PurchaseDto {
 
     private final long onePrice;
-    private final int totalPurchaseQuantity;
-    private final int setNum;
+    private int totalPurchaseQuantity;
+    private int setNum;
     private final int oneSetQuantity;
 
 
@@ -35,5 +35,10 @@ public class PurchaseDto {
 
     public long promotionSalePrice(){
         return onePrice * setNum;
+    }
+
+    public void update(PurchaseDto purchaseDto) {
+        this.totalPurchaseQuantity += purchaseDto.getTotalNum();
+        this.setNum += purchaseDto.getSetNum();
     }
 }

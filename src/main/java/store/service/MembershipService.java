@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class MembershipService {
     public ResultDto calculateAmount(Map<String, PurchaseDto> purchaseResult, boolean isMembershipSale) {
-
         long totalAmount = getTotalAmount(purchaseResult);
         long promotionAmount = getPromotionAmount(purchaseResult);
         long membershipAmount = 0;

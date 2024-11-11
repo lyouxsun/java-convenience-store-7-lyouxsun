@@ -4,10 +4,7 @@ import store.dto.InventoryDto;
 import store.service.PurchaseService;
 import store.view.InputView;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static store.enums.ErrorMessages.INVALID_FORMAT;
 import static store.enums.ErrorMessages.NON_INTEGER_QUANTITY;
@@ -24,8 +21,9 @@ public class InputController {
     }
 
     public Map<String, Integer> getPurchaseInput() {
+        Map<String, Integer> input = new LinkedHashMap<>();
         showInventory();
-        return readInput();
+        return readInput(input);
     }
 
     public void showInventory() {
@@ -33,16 +31,29 @@ public class InputController {
         inputView.showInventory(inventoryDto);
     }
 
-    private Map<String, Integer> readInput() {
+    private Map<String, Integer> readInput(Map<String, Integer> input) {
         while (true) {
             try {
                 String buy = inputView.requestPurchase();
-                Map<String, Integer> inputs = validateBuy(buy);
-                purchaseService.validateInputs(inputs);
-                return inputs;
+                Map<String, Integer> currentInputs = validateBuy(buy);
+                purchaseService.validateInputs(currentInputs);
+                putNewItem(input, currentInputs);
+                return input;
             } catch (IllegalArgumentException e) {
                 showException(e);
             }
+        }
+    }
+
+    private void putNewItem(Map<String, Integer> input, Map<String, Integer> currentInputs) {
+        for (Map.Entry<String, Integer> entry : currentInputs.entrySet()) {
+            String key = entry.getKey();
+            int value = entry.getValue();
+            if (input.containsKey(key)) {
+                input.put(key, input.get(key) + value);
+                continue;
+            }
+            input.put(key, value);
         }
     }
 
